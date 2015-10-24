@@ -1,10 +1,16 @@
-<ion-view view-title="Chats">
+<ion-view view-title="Hackathon">
+    <ion-nav-buttons side="right">
+      <button class="button button-clear button-positive" ng-click="ex()">
+        退出
+      </button>
+    </ion-nav-buttons>
   <ion-content>
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
         <img ng-src="{{chat.face}}">
         <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
+        <h6>{{chat.lastText}}</h6>
+        <p>我的想法或需求: asdfasdfasdfa;sdfjkads;lfjak;lsdjfkl;asdjfl;asdjf;asdfasdfasdfasdfasdfaasd</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
 
         <ion-option-button class="button-assertive" ng-click="remove(chat)">

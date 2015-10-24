@@ -59,10 +59,11 @@ angular.module('starter.services', [])
     console.log("roomId: ", roomId);
     var deferred = $q.defer();
     // 静态
-    deferred.reject(roomId);
+    deferred.resolve(roomId);
     // httpSrvc.request(
     //   "GET",
-    //   "http://10.2.200.203:8080/api/try",
+    //   // "http://10.2.200.203:8080/api/try",
+    //   "http://sf-2015.bitinn.net/api/try",
     //   {}
     //   ).success(function(data){
     //     console.log("tryApi success: ", data);
@@ -72,7 +73,7 @@ angular.module('starter.services', [])
 
     // httpSrvc.request(
     //   "POST",
-    //   "/rooms/00/verify",
+    //   "http://10.2.200.203:8080/api/rooms/sf-2015/verify",
     //   {
     //     code: roomId
     //   }
@@ -80,14 +81,14 @@ angular.module('starter.services', [])
     //     if(data.code === "200"){
     //       deferred.resolve(data.data);
     //     }else{
-    //       console.log(data.message);
+    //       console.log(data);
     //       deferred.reject("验证房间失败");
     //     }
     //   }).error(function(data){
     //     deferred.reject("暂时无法验证房间");
     //   });
     return deferred.promise
-  }
+  };
 
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

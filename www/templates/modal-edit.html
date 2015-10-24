@@ -2,11 +2,11 @@
   <ion-content>
     <div class="list list-inset">
       <label class="item item-input">
-        <input type="text" placeholder="唯一识别码">
+        <input type="text" ng-model="login.usrUid" placeholder="唯一识别码">
       </label>
     </div>
     <div class="button-panel">
-      <button class="button button-outline button-small button-round">取回信息</button>
+      <button class="button button-outline button-small button-round" ng-click="login.getUsrInfo()">取回信息</button>
     </div>
     <div class="item input-pic">
       <div class="input-pic-pre" style="background-image:url({{reg.image}})"></div>

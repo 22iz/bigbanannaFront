@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, Cropper, ComSrvc, NotificationService){
+.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, Cropper, ComSrvc, NotificationService, Chats){
   $rootScope.notification = {
 			typehood: "",
 			icon: "",
@@ -25,7 +25,6 @@ angular.module('starter.controllers', [])
     },function(rsEntry){
       // 全局提示
       NotificationService.set(rsEntry, "warning");
-      console.log(rsEntry);
     })
   }
  };
@@ -52,7 +51,20 @@ var dPIC = "img/logo.png"
    title: '',
    info: '',
    location: '',
- }
+ };
+// 取回信息
+ $scope.login = {
+  usrUid: '',
+  getUsrInfo: function(){
+    ComSrvc.usrUid = this.usrUid;
+    Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+      $scope.reg = chat;
+    },function(chat){
+      console.log(chat);
+    });
+  }
+ };
+
  $scope.sPIC = function() {
    angular.element('#srPIC').trigger("click");
  };

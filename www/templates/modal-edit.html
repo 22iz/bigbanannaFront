@@ -7,12 +7,12 @@
       </label>
     </div>
     <div class="button-panel" ng-if="!login.pureEdit">
-      <button class="button button-outline button-small button-round" ng-click="login.getUsrInfo()">取回信息</button>
+      <button class="button button-outline button-small button-positive button-round" ng-click="login.getUsrInfo()">取回信息</button>
     </div>
     <div class="item input-pic">
       <div class="input-pic-pre" style="background-image:url({{reg.image}})"></div>
       <div class="button-panel">
-        <button class="button button-outline button-small button-round" ng-click="sPIC()">随机更换</button>
+        <button class="button button-outline button-small button-positive button-round" ng-click="sPIC()">随机更换</button>
       </div>
     </div>
     <div class="list list-inset">
@@ -39,8 +39,8 @@
       </label>
     </div>
     <div class="button-panel">
-      <button class="button button-outline button-small button-round" ng-click="regInfo()" ng-if="!login.status">提交信息并进入</button>
-      <button class="button button-outline button-small button-round" ng-click="upInfo(login.pureEdit)" ng-if="login.status">修改信息并进入</button>
+      <button class="button button-outline button-small button-round button-positive" ng-click="regInfo()" ng-if="!login.status">提交信息并进入</button>
+      <button class="button button-outline button-small button-round button-positive" ng-click="upInfo(login.pureEdit)" ng-if="login.status">修改信息并进入</button>
     </div>
   </ion-content>
 </ion-modal-view>

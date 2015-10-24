@@ -1,3 +1,40 @@
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+通知中心 - 应用内
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+.notification {
+  display: block;
+  z-index: 999;
+  position: absolute;
+  top: -20px;
+  width: 100%;
+  height: 20px;
+  opacity: 0;
+  transition: 0.3s;
+  padding: 0px 20px;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bolder;
+  text-align: center;
+}
+.notification .icon {
+  margin: 0px 5px 0px 0px;
+}
+.notification-show {
+  top: 0px;
+  opacity: 1;
+}
+.notification-success {
+  color: rgb(60, 118, 61);
+  background: rgb(223, 240, 216);
+}
+.notification-warning {
+  color: rgb(138, 109, 59);
+  background: rgb(252, 248, 227);
+}
+.notification-danger {
+  color: rgb(169, 68, 66);
+  background: rgb(242, 222, 222);
+}
 /* Empty. Add your own CSS if you like */
 ion-content {
   background: #fafafa;

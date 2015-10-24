@@ -1,5 +1,11 @@
 angular.module('starter.controllers', [])
-.controller('ComCtrl', function($scope, $ionicModal, $state, Cropper){
+.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, Cropper, NotificationService){
+  $rootScope.notification = {
+			typehood: "",
+			icon: "",
+			message: "",
+			show: false
+	}
   $scope.er = function() {
     $state.go('tab.chats');
     $scope.modal.hide();
@@ -28,7 +34,7 @@ angular.module('starter.controllers', [])
  $scope.$on('modal.removed', function() {
    // Execute action
  });
- /* 图片 ---------------------------------------------------------------------*/
+ /* 图片 ----------------------------------------------------------------------*/
 var dPIC = "img/logo.png"
  $scope.reg = {
    pic: dPIC,
@@ -43,6 +49,8 @@ var dPIC = "img/logo.png"
      });
    };
  };
+ /* 通知 ----------------------------------------------------------------------*/
+
 })
 .controller('EnterCtrl', function($scope, $ionicModal, $state) {
 })

@@ -1,5 +1,37 @@
 angular.module('starter.services', [])
+// 通知服务
+.factory('NotificationService', function($rootScope, $timeout){
+	return {
+		set: function(message, typehood){
 
+			if (window.StatusBar) {
+				StatusBar.hide();
+			}
+			$rootScope.notification.typehood = "notification-"+typehood;
+			switch (typehood) {
+				case "success":
+					$rootScope.notification.icon = "ion-checkmark-circled";
+					break;
+				case "warning":
+					$rootScope.notification.icon = "ion-information-circled";
+					break;
+				case "danger":
+					$rootScope.notification.icon = "ion-minus-circled";
+					break;
+				default:
+					$rootScope.notification.icon = "ion-alert-circled";
+			}
+			$rootScope.notification.message = message;
+			$rootScope.notification.show = true;
+			$timeout(function () {
+				$rootScope.notification.show = false;
+				if (window.StatusBar) {
+					StatusBar.show();
+				}
+			}, 2000);
+		}
+	};
+})
 .service('httpService', function(){
 
   var bbHost = ""
@@ -86,7 +118,7 @@ angular.module('starter.services', [])
 
     // 静态
     var rs = {}
-    this.chats.forEach(function(chat){      
+    this.chats.forEach(function(chat){
       if(chat.uid == uid){
         rs = chat;
       };

@@ -35,6 +35,10 @@
   	<script src="lib/exif-js/exif.js"></script>
   </head>
   <body ng-app="starter" ng-controller="ComCtrl">
+    <!-- 通知栏 -->
+    <notification class="notification {{notification.typehood}}" ng-class="{&apos;notification-show&apos;:notification.show}">
+      <i class="icon {{notification.icon}}"></i>{{notification.message}}
+    </notification>
     <!--
       The nav bar that will be updated as we navigate between views.
     -->

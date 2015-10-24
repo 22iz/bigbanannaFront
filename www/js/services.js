@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-.service('httpSrvc', function(){
+.service('httpSrvc', function($http){
 
   var bbHost = ""
 
@@ -18,26 +18,40 @@ angular.module('starter.services', [])
 
 })
 
-.service('ComSrvc', function($q){
+.service('ComSrvc', function($q, httpSrvc){
 
   this.usrUid = 0;
 
   this.enterRoom = function(roomId){
+    console.log("roomId: ", roomId);
     var deferred = $q.defer();
-    httpSrvc.request(
-      "GET",
-      "/rooms/00/users",
-      {}
-      ).success(function(data){
-        if(data.code === "200"){
-          deferred.resolve(data.data);
-        }else{
-          console.log(data.message);
-          deferred.reject("获取用户列表失败");
-        }
-      }).error(function(data){
-        deferred.reject("暂时无法获取用户列表");
-      });
+    // httpSrvc.request(
+
+    //   "",
+    //   "",
+    //   {}
+    //   ).success(function(data){
+    //     console.log("tryApi success: ", data);
+    //   }).error(function(data){
+    //     console.log("tryApi error: ", data);
+    //   });
+
+    // httpSrvc.request(
+    //   "POST",
+    //   "/rooms/00/verify",
+    //   {
+    //     code: roomId
+    //   }
+    //   ).success(function(data){
+    //     if(data.code === "200"){
+    //       deferred.resolve(data.data);
+    //     }else{
+    //       console.log(data.message);
+    //       deferred.reject("验证房间失败");
+    //     }
+    //   }).error(function(data){
+    //     deferred.reject("暂时无法验证房间");
+    //   });
     return deferred.promise
   }
 

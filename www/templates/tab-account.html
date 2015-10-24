@@ -1,15 +1,26 @@
 <ion-view view-title="我">
   <ion-nav-buttons side="right">
-    <button class="button button-clear button-positive" ng-click="openModal()">编辑</button>
+    <button class="button button-clear button-assertive" ng-click="ex()">退出</button>
   </ion-nav-buttons>
-  <ion-content>
-  <div>{{usrInfo.image}}</div>
-  <div>{{usrInfo.name}}</div>
-  <div>{{usrInfo.title}}</div>
-  <div>{{usrInfo.info}}</div>
-  <div>{{usrInfo.location}}</div>
-    <div class="button-panel">
-      <button class="button button-outline button-small button-round" ng-click="ex()">退出</button>
+  <ion-content class="padding">
+    <div class="usr-info">
+      <div class="usr-face">
+        <img ng-src="{{usrInfo.image}}">
+      </div>
+      <h1>{{usrInfo.name}}</h1>
+      <h3>{{usrInfo.title}}</h3>
+      <div class="usr-des">
+        <h6>我的想法或需求</h6>
+        <p>{{usrInfo.info}}</p>
+      </div>
+      <div class="usr-loc">
+        <h6>如何找到我</h6>
+        <p>{{usrInfo.location}}</p>
+      </div>
+      </p>
+    </div>
+    <div class="button-panel margin-t-lg">
+      <button class="button button-outline button-small button-round button-positive" ng-click="openModal()">编辑</button>
     </div>
   </ion-content>
 </ion-view>

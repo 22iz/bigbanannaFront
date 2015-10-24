@@ -1,3 +1,43 @@
+.margin-t-lg {
+  margin-top: 20px;
+}
+.usr-info {
+  text-align: center;
+}
+.usr-info .usr-face {
+  width: 150px;
+  height: 150px;
+  border-radius: 1000px;
+  border: 5px solid #ddd;
+  overflow: hidden;
+  margin: 10px auto 15px auto;
+}
+.usr-info .usr-face img {
+  width: 100%;
+}
+.usr-info h1 {
+  font-size: 24px;
+  margin-bottom: 0px;
+}
+.usr-info h3 {
+  margin-top: 0px;
+  padding: 0px 50px;
+  font-size: 20px;
+  color: #a0a0a0;
+}
+.usr-info h6 {
+  color: #a0a0a0;
+  margin: 20px auto 0px auto;
+  padding: 0px 50px;
+}
+.usr-info p {
+  font-size: 14px;
+}
+.usr-info .usr-des,
+.usr-info .usr-loc {
+
+}
+
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 通知中心 - 应用内
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
@@ -48,11 +88,11 @@ ion-content {
 }
 .logo h1 {
   margin-top: 0px;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: normal;
 }
 .logo h3 {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: normal;
 }
 .button-panel{

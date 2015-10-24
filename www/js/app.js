@@ -69,6 +69,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
         controller: 'AccountCtrl'
       }
     }
+  })
+  .state('tab.liked-detail', {
+    url: '/account/:chatId',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/chat-detail.html',
+        controller: 'ChatDetailCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback

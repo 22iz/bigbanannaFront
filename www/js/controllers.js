@@ -113,6 +113,26 @@ var dPIC = "img/logo.png"
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('AccountCtrl', function($scope, $state, Chats, ComSrvc) {
+  $scope.pl = [
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    }
+  ]
   Chats.getAChat(ComSrvc.usrUid).then(function(chat){
     $scope.usrInfo = chat;
   },function(chat){

@@ -66,18 +66,17 @@ angular.module('starter.controllers', [])
  });
  $scope.openModal = function(fromState, roomId) {
   if(fromState == "entry"){
-    $scope.modal.show();
-  //   ComSrvc.enterRoom(roomId).then(function(rsEntry){
-  //    $scope.reg = ComSrvc.deepCopy(regPrototype);
-  //    $scope.login = ComSrvc.deepCopy(loginPrototype);
-  //    $scope.modal.show();
-  //   },function(rsEntry){
-  //     // 全局提示
-  //     NotificationService.set(rsEntry, "warning");
-  //   })
-  // }else if(fromState == "account"){
-  //   $scope.login.pureEdit = true;
-  //  $scope.modal.show();
+    ComSrvc.enterRoom(roomId).then(function(rsEntry){
+     $scope.reg = ComSrvc.deepCopy(regPrototype);
+     $scope.login = ComSrvc.deepCopy(loginPrototype);
+     $scope.modal.show();
+    },function(rsEntry){
+      // 全局提示
+      NotificationService.set(rsEntry, "warning");
+    })
+  }else if(fromState == "account"){
+    $scope.login.pureEdit = true;
+   $scope.modal.show();
   }
  };
  $scope.closeModal = function() {
@@ -95,8 +94,9 @@ angular.module('starter.controllers', [])
  $scope.$on('modal.removed', function() {
    // Execute action
  });
+var dPIC = $scope.iH + (parseInt(Math.random()*100)%20+1) + ".png";
 var regPrototype = {
-  image: '',
+  image: dPIC,
   name: '',
   title: '',
   info: '',
@@ -122,7 +122,6 @@ var loginPrototype = {
 };
 // 取回信息
  $scope.login = ComSrvc.deepCopy(loginPrototype);
- $scope.reg.image = $scope.iH + (parseInt(Math.random()*100)%20+1) + ".png";
  $scope.sPIC = function() {
    $scope.reg.image = $scope.iH + (parseInt(Math.random()*100)%20+1) + ".png";
  };

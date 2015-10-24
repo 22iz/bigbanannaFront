@@ -3,6 +3,10 @@
   text-align: center;
   color: #a0a0a0;
 }
+input[disabled="disabled"]{
+  background: none;
+  color: #666;
+}
 .clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
 .clearfix{*+height:1%;}
 .usr-liked-panel {

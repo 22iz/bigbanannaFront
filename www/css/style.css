@@ -1,1 +1,14 @@
 /* Empty. Add your own CSS if you like */
+.button-panel {
+  padding: 15px 0px 15px 0px;
+  text-align: center;
+  width: 100%;
+}
+.button-round {
+  border-radius: 1000px;
+  min-width: 80px;
+  font-weight: bolder;
+}
+textarea {
+  height: 100px;
+}

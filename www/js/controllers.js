@@ -51,6 +51,7 @@ var dPIC = "img/logo.png"
    title: '',
    info: '',
    location: '',
+   pn: '',
  };
 // 取回信息
  $scope.login = {

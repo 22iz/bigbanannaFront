@@ -3,11 +3,11 @@
     <div class="list">
       <label class="item item-input item-floating-label">
         <span class="input-label">输入密钥</span>
-        <input type="text" placeholder="输入密钥">
+        <input type="text" ng-model="roomInfo.roomId" placeholder="输入密钥">
       </label>
     </div>
     <div class="button-panel">
-      <button class="button button-outline button-small button-round" ng-click="openModal()">进入</button>
+      <button class="button button-outline button-small button-round" ng-click="openModal('entry', {{roomInfo.roomId}})">进入</button>
     </div>
   </ion-content>
 </ion-view>

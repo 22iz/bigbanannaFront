@@ -1,5 +1,5 @@
 angular.module('starter.controllers', [])
-.controller('ComCtrl', function($scope, $ionicModal, $state, Cropper){
+.controller('ComCtrl', function($scope, $ionicModal, $state, Cropper, ComSrvc){
   $scope.er = function() {
     $state.go('tab.chats');
     $scope.modal.hide();
@@ -10,8 +10,15 @@ angular.module('starter.controllers', [])
  }).then(function(modal) {
    $scope.modal = modal;
  });
- $scope.openModal = function() {
-   $scope.modal.show();
+ $scope.openModal = function(fromState, roomId) {
+  if(fromState == "entry"){
+    ComSrvc.enterRoom(roomId).then(function(rsEntry){
+     $scope.modal.show();      
+    },function(rsEntry){
+      // 全局提示
+      console.log(rsEntry);
+    })
+  }
  };
  $scope.closeModal = function() {
    $scope.modal.hide();
@@ -30,7 +37,7 @@ angular.module('starter.controllers', [])
  });
  /* 图片 ---------------------------------------------------------------------*/
  $scope.reg = {
-   pic: undefined,
+  pic: undefined,
  }
  $scope.sPIC = function() {
    angular.element('#srPIC').trigger("click");
@@ -44,15 +51,24 @@ angular.module('starter.controllers', [])
  };
 })
 .controller('EnterCtrl', function($scope, $ionicModal, $state) {
+
+  $scope.roomInfo = {
+    roomId: ''
+  };
+
 })
 .controller('ChatsCtrl', function($scope, $state, Chats) {
-  $scope.chats = Chats.chats;
+  Chats.allChats().then(function(chats){
+    $scope.chats = Chats.chats;
+  },function(chats){
+    console.log(chats);
+  });
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
 })
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  Chats.get($stateParams.chatId).then(function(chat){
+  Chats.getAChat($stateParams.chatId).then(function(chat){
     $scope.chat = chat;
   },function(chat){
     console.log(chat);

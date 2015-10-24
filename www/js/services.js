@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-.service('httpService', function(){
+.service('httpSrvc', function(){
 
   var bbHost = ""
 
@@ -18,11 +18,33 @@ angular.module('starter.services', [])
 
 })
 
+.service('ComSrvc', function($q){
+
+  this.enterRoom = function(roomId){
+    var deferred = $q.defer();
+    httpSrvc.request(
+      "GET",
+      "/rooms/00/users",
+      {}
+      ).success(function(data){
+        if(data.code === "200"){
+          deferred.resolve(data.data);
+        }else{
+          console.log(data.message);
+          deferred.reject("获取用户列表失败");
+        }
+      }).error(function(data){
+        deferred.reject("暂时无法获取用户列表");
+      });
+    return deferred.promise
+  }
+
+})
+
 .service('Chats', function($q) {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-
   this.chats = [{
       uid: 0,
       name: 'Ben Sparrow',
@@ -62,26 +84,27 @@ angular.module('starter.services', [])
 
   this.allChats = function(){
     var deferred = $q.defer();
-    // httpService.request(
+    // httpSrvc.request(
     //   "GET",
     //   "/rooms/00/users",
     //   {}
     //   ).success(function(data){
-    //     if(data.statusCode === "200"){
-    //       deferred.resolve(data.result);
+    //     if(data.code === "200"){
+    //       deferred.resolve(data.data);
     //     }else{
+    //       console.log(data.message);
     //       deferred.reject("获取用户列表失败");
     //     }
     //   }).error(function(data){
     //     deferred.reject("暂时无法获取用户列表");
     //   });
 
-    deferred.resolve(chats);
+    deferred.resolve(this.chats);
 
     return deferred.promise
   };
 
-  this.get = function(uid){
+  this.getAChat = function(uid){
     var deferred = $q.defer();
 
     // 静态
@@ -94,14 +117,15 @@ angular.module('starter.services', [])
     deferred.resolve(rs);
 
     // // 拉后台
-    // httpService.request(
+    // httpSrvc.request(
     //   "GET",
     //   "/users/"+uid,
     //   {}
     //   ).success(function(data){
-    //     if(data.statusCode === "200"){
-    //       deferred.resolve(data.result);
+    //     if(data.code === "200"){
+    //       deferred.resolve(data.data);
     //     }else{
+    //       console.log(data.message);
     //       deferred.reject("获取用户列表失败");
     //     }
     //   }).error(function(data){

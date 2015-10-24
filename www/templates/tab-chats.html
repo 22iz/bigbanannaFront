@@ -9,7 +9,7 @@
         <i class="icon ion-search placeholder-icon"></i>
         <input type="text" placeholder="搜索" ng-model="sq">
       </label>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats | filter:sq | orderBy:'name'" type="item-text-wrap" href="#/tab/chats/{{chat.uid}}">
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats | filter:sq | orderBy:'name'" type="item-text-wrap" nav-transition="none" href="#/tab/chats/{{chat.uid}}">
         <img ng-src="{{chat.image}}">
         <h2>{{chat.name}}</h2>
         <p>{{chat.title}}</p>

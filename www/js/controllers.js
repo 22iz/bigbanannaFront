@@ -39,13 +39,22 @@ angular.module('starter.controllers', [])
   //
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  $scope.chats = Chats.all();
+  $scope.chats = Chats.chats;
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
 })
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
+  console.log($scope.chat);
+  // $scope.chat = {
+  //     uid: 0,
+  //     name: 'Ben Sparrow',
+  //     title: "ceo",
+  //     info: 'You on your way?',
+  //     location: '13700000000',
+  //     image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+  //   };
 })
 .controller('AccountCtrl', function($scope, $state) {
   $scope.ex = function() {

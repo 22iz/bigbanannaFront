@@ -150,7 +150,7 @@ var loginPrototype = {
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('ChatsCtrl', function($scope, $state, Chats) {
+.controller('ChatsCtrl', function($scope, $state, Chats, ComSrvc) {
   var getAllChats = function(){
     Chats.allChats().then(function(chats){
       // 静态
@@ -166,8 +166,8 @@ var loginPrototype = {
     getAllChats();
     $scope.$broadcast('scroll.refreshComplete');
   };
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
+  $scope.poke = function(pokeId) {
+    Chats.poke(ComSrvc.usrUid, pokeId);
   };
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

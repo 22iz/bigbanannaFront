@@ -38,8 +38,8 @@ angular.module('starter.services', [])
   // local
   // var bbHost = "http://10.2.200.203:8080/api/";
   // release
-  // var bbHost = "http://127.0.0.1/api/";
-  var bbHost = "/api/";
+  // var bbHost = "/api/";
+  var bbHost = "http://bb.introme.so/api/";
 
 
   this.request = function(method, url, data) {
@@ -371,6 +371,33 @@ angular.module('starter.services', [])
     return deferred.promise
 
   };
+
+  this.poke = function(usrUid, pokeId){
+
+    var deferred = $q.defer();
+    httpSrvc.request(
+      "PUT",
+      "users/"+usrUid+"/pokes/"+pokeId,
+      {}
+      ).success(function(data){
+        console.log("poke: ", data);
+        if(data.code === 200){
+          deferred.resolve("捅成功");
+        }else{
+          console.log(data);
+          deferred.reject("捅失败");
+        };
+      }).error(function(data){
+         if(data.code === 409){
+            deferred.resolve("已经捅过了");
+         }else{
+          console.log("poke: ", data);
+          deferred.reject("暂时无法捅");          
+         };
+      });
+    return deferred.promise
+
+  }
 
 
 });

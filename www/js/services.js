@@ -120,8 +120,12 @@ angular.module('starter.services', [])
           deferred.reject("注册失败");
         }
       }).error(function(data){
-        console.log("regInfo: ", data);
-        deferred.reject("暂时无法注册");
+        if(data.code === 409){
+          deferred.reject("已经注册，请取回")
+        }else{
+          console.log("regInfo: ", data);
+          deferred.reject("暂时无法注册");
+        };
       });
     return deferred.promise
   };
@@ -364,6 +368,9 @@ angular.module('starter.services', [])
           deferred.reject("获取用户列表失败");
         }
       }).error(function(data){
+        if(data.code === 409){
+          console.log(data);
+        }
         console.log("getAChat: ", data);
         deferred.reject("暂时无法获取用户列表");
       });
@@ -389,15 +396,34 @@ angular.module('starter.services', [])
         };
       }).error(function(data){
          if(data.code === 409){
-            deferred.resolve("已经捅过了");
+            deferred.reject("已经捅过了");
          }else{
           console.log("poke: ", data);
           deferred.reject("暂时无法捅");          
          };
       });
     return deferred.promise
+  };
 
-  }
-
+  this.getPokes = function(usrUid){
+    var deferred = $q.defer();
+    httpSrvc.request(
+      "GET",
+      "users/"+usrUid+"/pokes",
+      {}
+      ).success(function(data){
+        console.log("getPokes: ", data);
+        if(data.code === 200){
+          deferred.resolve(data.data);
+        }else{
+          console.log(data.message);
+          deferred.reject("获取被捅列表失败");
+        }
+      }).error(function(data){
+        console.log("getPokes: ", data);
+        deferred.reject("暂时无法获取被捅列表");
+      });
+    return deferred.promise
+  };
 
 });

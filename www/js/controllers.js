@@ -10,13 +10,6 @@ angular.module('starter.controllers', [])
 			show: false
 	};
   $scope.regInfo = function() {
-    // // 七牛上传图片返回地址
-    // var imgName = ComSrvc.genImgName($scope.reg.image);
-    // console.log(imgName);
-    // ComSrvc.qiniuGetUpToken(imgName)
-    //   .then(function(upTokenInfo){
-    //     ComSrvc.qiniuUpload($scope.cbCardInfo.submitInfo.image, upTokenInfo["uptoken"], upTokenInfo["SaveKey"])
-    //       .then(function(rsUp){
     ComSrvc.regInfo($scope.reg).then(function(msg){
       // bind user uid
       ComSrvc.usrUid = $scope.reg.uid;
@@ -35,25 +28,22 @@ angular.module('starter.controllers', [])
   };
 
   $scope.upInfo = function(pureEdit) {
-    // // 七牛上传图片返回地址
-    // var imgName = ComSrvc.genImgName($scope.reg.image);
-    // console.log(imgName);
-    // ComSrvc.qiniuGetUpToken(imgName)
-    //   .then(function(upTokenInfo){
-    //     ComSrvc.qiniuUpload($scope.cbCardInfo.submitInfo.image, upTokenInfo["uptoken"], upTokenInfo["SaveKey"])
-    //       .then(function(rsUp){
     ComSrvc.upInfo($scope.reg).then(function(msg){
-      // bind user uid
-      ComSrvc.usrUid = $scope.reg.uid;
-      ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
-        NotificationService.set(enterMsg, "success");
-        if(!pureEdit){
+      if(!pureEdit){
+        // bind user uid
+        ComSrvc.usrUid = $scope.reg.uid;
+        ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
+          NotificationService.set(enterMsg, "success");
           $state.go('tab.chats');
-        };
-        $scope.modal.hide();
-      },function(enterMsg){
-        NotificationService.set(enterMsg, "warning");
-      })
+          $scope.modal.hide();
+        },function(enterMsg){
+          NotificationService.set(enterMsg, "warning");
+        });
+      }else{
+          NotificationService.set("修改成功", "success");
+          $rootScope.$broadcast('updateAccount');
+          $scope.modal.hide();
+      };
     },function(msg){
       NotificationService.set(msg, "warning");
     });
@@ -109,12 +99,13 @@ var loginPrototype = {
   getUsrInfo: function(){
     ComSrvc.usrUid = this.usrUid;
     Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+      NotificationService.set("取回成功", "success");
       // 如果有信息把按钮变成修改按钮
       $scope.login.status = true;
       $scope.reg = chat;
     },function(chat){
+      NotificationService.set("没有该用户", "warning");
      $scope.reg = ComSrvc.deepCopy(regPrototype);
-      console.log(chat);
     });
   },
   status: false, // false 为注册按钮，true 为修改按钮
@@ -126,6 +117,14 @@ var loginPrototype = {
    $scope.reg.image = $scope.iH + (parseInt(Math.random()*100)%20+1) + ".png";
  };
  /* 通知 ----------------------------------------------------------------------*/
+
+ $scope.poke = function(pokeId) {
+   Chats.poke(ComSrvc.usrUid, pokeId).then(function(pMsg){
+     NotificationService.set(pMsg, "success");
+   },function(pMsg){
+     NotificationService.set(pMsg, "warning");
+   })
+ };
 
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -139,7 +138,7 @@ var loginPrototype = {
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('ChatsCtrl', function($scope, $state, Chats, ComSrvc) {
+.controller('ChatsCtrl', function($scope, $state, Chats, ComSrvc, NotificationService) {
   var getAllChats = function(){
     Chats.allChats().then(function(chats){
       // 静态
@@ -155,9 +154,6 @@ var loginPrototype = {
     getAllChats();
     $scope.$broadcast('scroll.refreshComplete');
   };
-  $scope.poke = function(pokeId) {
-    Chats.poke(ComSrvc.usrUid, pokeId);
-  };
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -170,7 +166,7 @@ var loginPrototype = {
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('AccountCtrl', function($scope, $state, Chats, ComSrvc, NotificationService) {
+.controller('AccountCtrl', function($rootScope, $scope, $state, Chats, ComSrvc, NotificationService) {
 
   console.log("AccountCtrl: ", ComSrvc.usrUid);
 
@@ -195,11 +191,24 @@ var loginPrototype = {
     }
   ];
 
-  Chats.getAChat(ComSrvc.usrUid).then(function(chat){
-    $scope.usrInfo = chat;
-  },function(chat){
-    console.log(chat);
+  var getAChat = function(){
+    Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+      $scope.usrInfo = chat;
+    },function(chat){
+      console.log(chat);
+    });    
+  };
+  getAChat();
+  $rootScope.$on('updateAccount', function(){
+    getAChat();
   });
+
+  Chats.getPokes(ComSrvc.usrUid).then(function(mPokes){
+    $scope.pl = mPokes;
+  },function(mPokes){
+    NotificationService.set(mPokes, "warning");
+  })
+
   $scope.ex = function() {
     ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid).then(function(msg){
       $state.go('enter');

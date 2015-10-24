@@ -86,7 +86,7 @@ angular.module('starter.services', [])
 
     // 静态
     var rs = {}
-    chats.forEach(function(chat){      
+    this.chats.forEach(function(chat){      
       if(chat.uid == uid){
         rs = chat;
       };

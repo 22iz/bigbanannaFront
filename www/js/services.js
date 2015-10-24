@@ -20,6 +20,8 @@ angular.module('starter.services', [])
 
 .service('ComSrvc', function($q){
 
+  this.usrUid = 0;
+
   this.enterRoom = function(roomId){
     var deferred = $q.defer();
     httpSrvc.request(

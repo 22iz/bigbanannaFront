@@ -36,8 +36,13 @@ angular.module('starter.controllers', [])
    // Execute action
  });
  /* 图片 ---------------------------------------------------------------------*/
+var dPIC = "img/logo.png"
  $scope.reg = {
-  pic: undefined,
+   image: dPIC,
+   name: '',
+   title: '',
+   info: '',
+   location: '',
  }
  $scope.sPIC = function() {
    angular.element('#srPIC').trigger("click");
@@ -45,8 +50,10 @@ angular.module('starter.controllers', [])
  $scope.onFile = function(blob) {
    if (blob) {
      Cropper.encode((file = blob)).then(function(dataUrl) {
-       $scope.reg.pic = dataUrl;
+       $scope.reg.image = dataUrl;
      });
+   } else {
+    $scope.reg.image = dPIC;
    };
  };
 })
@@ -73,17 +80,13 @@ angular.module('starter.controllers', [])
   },function(chat){
     console.log(chat);
   });
-  // $scope.chat = Chats.get($stateParams.chatId);
-  // $scope.chat = {
-  //     uid: 0,
-  //     name: 'Ben Sparrow',
-  //     title: "ceo",
-  //     info: 'You on your way?',
-  //     location: '13700000000',
-  //     image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-  //   };
 })
-.controller('AccountCtrl', function($scope, $state) {
+.controller('AccountCtrl', function($scope, $state, Chats, ComSrvc) {
+  Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+    $scope.usrInfo = chat;
+  },function(chat){
+    console.log(chat);
+  });
   $scope.ex = function() {
     $state.go('enter');
   };

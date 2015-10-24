@@ -21,7 +21,7 @@ angular.module('starter.controllers', [])
  $scope.openModal = function(fromState, roomId) {
   if(fromState == "entry"){
     ComSrvc.enterRoom(roomId).then(function(rsEntry){
-     $scope.modal.show();      
+     $scope.modal.show();
     },function(rsEntry){
       // 全局提示
       NotificationService.set(rsEntry, "warning");

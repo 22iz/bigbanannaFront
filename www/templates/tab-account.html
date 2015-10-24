@@ -1,4 +1,7 @@
 <ion-view view-title="我">
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-positive" ng-click="openModal()">编辑</button>
+  </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <button class="button button-clear button-assertive" ng-click="ex()">退出</button>
   </ion-nav-buttons>
@@ -17,10 +20,6 @@
         <h6>如何找到我</h6>
         <p>{{usrInfo.location}}</p>
       </div>
-      </p>
-    </div>
-    <div class="button-panel margin-t-lg">
-      <button class="button button-outline button-small button-round button-positive" ng-click="openModal()">编辑</button>
     </div>
   </ion-content>
 </ion-view>

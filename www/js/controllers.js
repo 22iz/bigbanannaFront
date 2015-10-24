@@ -46,14 +46,26 @@ angular.module('starter.controllers', [])
 .controller('EnterCtrl', function($scope, $ionicModal, $state) {
 })
 .controller('ChatsCtrl', function($scope, $state, Chats) {
-
-  $scope.chats = Chats.all();
+  $scope.chats = Chats.chats;
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
 })
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+  Chats.get($stateParams.chatId).then(function(chat){
+    $scope.chat = chat;
+  },function(chat){
+    console.log(chat);
+  });
+  // $scope.chat = Chats.get($stateParams.chatId);
+  // $scope.chat = {
+  //     uid: 0,
+  //     name: 'Ben Sparrow',
+  //     title: "ceo",
+  //     info: 'You on your way?',
+  //     location: '13700000000',
+  //     image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+  //   };
 })
 .controller('AccountCtrl', function($scope, $state) {
   $scope.ex = function() {

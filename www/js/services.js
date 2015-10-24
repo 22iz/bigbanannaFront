@@ -1,5 +1,37 @@
 angular.module('starter.services', [])
-
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// 通知服务
+.factory('NotificationService', function($rootScope, $timeout){
+  return {
+    set: function(message, typehood){
+      $rootScope.notification.typehood = "notification-"+typehood;
+      switch (typehood) {
+        case "success":
+          $rootScope.notification.icon = "ion-checkmark-circled";
+          break;
+        case "warning":
+          $rootScope.notification.icon = "ion-information-circled";
+          break;
+        case "danger":
+          $rootScope.notification.icon = "ion-minus-circled";
+          break;
+        default:
+          $rootScope.notification.icon = "ion-alert-circled";
+      }
+      $rootScope.notification.message = message;
+      $rootScope.notification.show = true;
+      $timeout(function () {
+        $rootScope.notification.show = false;
+        if (window.StatusBar) {
+          StatusBar.show();
+        }
+      }, 2000);
+    }
+  };
+})
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .service('httpSrvc', function($http){
 
   var bbHost = ""
@@ -17,7 +49,8 @@ angular.module('starter.services', [])
   };
 
 })
-
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .service('ComSrvc', function($q, httpSrvc){
 
   this.usrUid = 0;
@@ -25,6 +58,8 @@ angular.module('starter.services', [])
   this.enterRoom = function(roomId){
     console.log("roomId: ", roomId);
     var deferred = $q.defer();
+    // 静态
+    deferred.reject(roomId);
     // httpSrvc.request(
     //   "GET",
     //   "http://10.2.200.203:8080/api/try",
@@ -55,7 +90,8 @@ angular.module('starter.services', [])
   }
 
 })
-
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .service('Chats', function($q) {
   // Might use a resource here that returns a JSON array
 
@@ -124,7 +160,7 @@ angular.module('starter.services', [])
 
     // 静态
     var rs = {}
-    this.chats.forEach(function(chat){      
+    this.chats.forEach(function(chat){
       if(chat.uid == uid){
         rs = chat;
       };

@@ -1,5 +1,13 @@
 angular.module('starter.controllers', [])
-.controller('ComCtrl', function($scope, $ionicModal, $state, Cropper, ComSrvc){
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, Cropper, ComSrvc, NotificationService){
+  $rootScope.notification = {
+			typehood: "",
+			icon: "",
+			message: "",
+			show: false
+	};
   $scope.er = function() {
     $state.go('tab.chats');
     $scope.modal.hide();
@@ -16,6 +24,7 @@ angular.module('starter.controllers', [])
      $scope.modal.show();      
     },function(rsEntry){
       // 全局提示
+      NotificationService.set(rsEntry, "warning");
       console.log(rsEntry);
     })
   }
@@ -35,7 +44,7 @@ angular.module('starter.controllers', [])
  $scope.$on('modal.removed', function() {
    // Execute action
  });
- /* 图片 ---------------------------------------------------------------------*/
+ /* 图片 ----------------------------------------------------------------------*/
 var dPIC = "img/logo.png"
  $scope.reg = {
    image: dPIC,
@@ -56,7 +65,11 @@ var dPIC = "img/logo.png"
     $scope.reg.image = dPIC;
    };
  };
+ /* 通知 ----------------------------------------------------------------------*/
+
 })
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('EnterCtrl', function($scope, $ionicModal, $state) {
 
   $scope.roomInfo = {
@@ -64,6 +77,8 @@ var dPIC = "img/logo.png"
   };
 
 })
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ChatsCtrl', function($scope, $state, Chats) {
   Chats.allChats().then(function(chats){
     $scope.chats = Chats.chats;
@@ -74,6 +89,8 @@ var dPIC = "img/logo.png"
     Chats.remove(chat);
   };
 })
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   Chats.getAChat($stateParams.chatId).then(function(chat){
     $scope.chat = chat;
@@ -81,6 +98,8 @@ var dPIC = "img/logo.png"
     console.log(chat);
   });
 })
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('AccountCtrl', function($scope, $state, Chats, ComSrvc) {
   Chats.getAChat(ComSrvc.usrUid).then(function(chat){
     $scope.usrInfo = chat;

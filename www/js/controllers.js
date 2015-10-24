@@ -8,10 +8,44 @@ angular.module('starter.controllers', [])
 			message: "",
 			show: false
 	};
-  $scope.er = function() {
-    $state.go('tab.chats');
-    $scope.modal.hide();
-  }
+  $scope.regInfo = function() {
+    // // 七牛上传图片返回地址
+    // var imgName = ComSrvc.genImgName($scope.reg.image);
+    // console.log(imgName);
+    // ComSrvc.qiniuGetUpToken(imgName)
+    //   .then(function(upTokenInfo){
+    //     ComSrvc.qiniuUpload($scope.cbCardInfo.submitInfo.image, upTokenInfo["uptoken"], upTokenInfo["SaveKey"])
+    //       .then(function(rsUp){
+    $scope.reg.image = "13700000000_42700000000000.png";
+    ComSrvc.regInfo($scope.reg).then(function(msg){
+      // bind user uid
+      ComSrvc.usrUid = $scope.reg.uid;
+      // 更新登录状态（编辑状态）
+      $scope.login.status = true;
+      NotificationService.set(msg, "warning");
+      $state.go('tab.chats');
+      $scope.modal.hide();
+    },function(msg){
+      NotificationService.set(msg, "warning");
+    });
+  };
+
+  $scope.upInfo = function() {
+    // // 七牛上传图片返回地址
+    // var imgName = ComSrvc.genImgName($scope.reg.image);
+    // console.log(imgName);
+    // ComSrvc.qiniuGetUpToken(imgName)
+    //   .then(function(upTokenInfo){
+    //     ComSrvc.qiniuUpload($scope.cbCardInfo.submitInfo.image, upTokenInfo["uptoken"], upTokenInfo["SaveKey"])
+    //       .then(function(rsUp){
+    ComSrvc.upInfo($scope.reg).then(function(msg){
+      NotificationService.set(msg, "warning");
+      $state.go('tab.chats');
+      $scope.modal.hide();
+    },function(msg){
+      NotificationService.set(msg, "warning");
+    });
+  };
   $ionicModal.fromTemplateUrl('templates/modal-edit.html', {
    scope: $scope,
    animation: 'slide-in-up'
@@ -21,11 +55,14 @@ angular.module('starter.controllers', [])
  $scope.openModal = function(fromState, roomId) {
   if(fromState == "entry"){
     ComSrvc.enterRoom(roomId).then(function(rsEntry){
-     $scope.modal.show();      
+     $scope.modal.show();
     },function(rsEntry){
       // 全局提示
       NotificationService.set(rsEntry, "warning");
     })
+  }else if(fromState == "account"){
+    $scope.login.pureEdit = true;
+   $scope.modal.show();
   }
  };
  $scope.closeModal = function() {
@@ -45,25 +82,31 @@ angular.module('starter.controllers', [])
  });
  /* 图片 ----------------------------------------------------------------------*/
 var dPIC = "img/logo.png"
- $scope.reg = {
-   image: dPIC,
-   name: '',
-   title: '',
-   info: '',
-   location: '',
-   pn: '',
- };
+var regPrototype = {
+  image: dPIC,
+  name: '',
+  title: '',
+  info: '',
+  location: '',
+  uid: '',
+};
+ $scope.reg = ComSrvc.deepCopy(regPrototype);
 // 取回信息
  $scope.login = {
   usrUid: '',
   getUsrInfo: function(){
     ComSrvc.usrUid = this.usrUid;
     Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+      // 如果有信息把按钮变成修改按钮
+      $scope.login.status = true;
       $scope.reg = chat;
     },function(chat){
+     $scope.reg = ComSrvc.deepCopy(regPrototype);
       console.log(chat);
     });
-  }
+  },
+  status: false, // false 为注册按钮，true 为修改按钮
+  pureEdit: false
  };
 
  $scope.sPIC = function() {
@@ -94,7 +137,10 @@ var dPIC = "img/logo.png"
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ChatsCtrl', function($scope, $state, Chats) {
   Chats.allChats().then(function(chats){
-    $scope.chats = Chats.chats;
+    // 静态
+    // $scope.chats = Chats.chats;
+    // 动态
+    $scope.chats = chats;
   },function(chats){
     console.log(chats);
   });
@@ -114,6 +160,7 @@ var dPIC = "img/logo.png"
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('AccountCtrl', function($scope, $state, Chats, ComSrvc) {
+  console.log("AccountCtrl: ", ComSrvc.usrUid);
   Chats.getAChat(ComSrvc.usrUid).then(function(chat){
     $scope.usrInfo = chat;
   },function(chat){

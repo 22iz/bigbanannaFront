@@ -34,8 +34,8 @@ angular.module('starter.services', [])
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .service('httpSrvc', function($http){
 
-  var bbHost = ""
-  // var bbHost = "http://10.2.200.203:8080/api/"
+  // var bbHost = ""
+  var bbHost = "http://10.2.200.203:8080/api/"
 
   this.request = function(method, url, data) {
     console.log("httpRequest: ", data);
@@ -60,7 +60,7 @@ angular.module('starter.services', [])
     console.log("roomId: ", roomId);
     var deferred = $q.defer();
     // 静态
-    deferred.resolve(roomId);
+    // deferred.resolve(roomId);
     // httpSrvc.request(
     //   "GET",
     //   // "http://10.2.200.203:8080/api/try",
@@ -72,29 +72,160 @@ angular.module('starter.services', [])
     //     console.log("tryApi error: ", data);
     //   });
 
-    // httpSrvc.request(
-    //   "POST",
-    //   "rooms/sf-2015/verify",
-    //   {
-    //     code: roomId
-    //   }
-    //   ).success(function(data){
-    //     if(data.code === "200"){
-    //       deferred.resolve(data.data);
-    //     }else{
-    //       console.log(data);
-    //       deferred.reject("验证房间失败");
-    //     }
-    //   }).error(function(data){
-    //     deferred.reject("暂时无法验证房间");
-    //   });
+    httpSrvc.request(
+      "POST",
+      "rooms/sf-2015/verify",
+      "code=" + roomId
+      ).success(function(data){
+        if(data.code === 200){
+          console.log("verify: ", data);
+          deferred.resolve(data.data);
+        }else{
+          console.log("verify: ", data);
+          deferred.reject("验证房间失败");
+        }
+      }).error(function(data){
+        console.log("verify: ", data);
+        deferred.reject("暂时无法验证房间");
+      });
     return deferred.promise
   };
+
+  var stringParams = function(infoDict){
+    var str = [];
+    for(i in infoDict){
+      str.push(i+"="+infoDict[i]);
+    }
+    console.log(str.join("&"));
+    return str.join("&")
+  };
+
+  this.regInfo = function(info){
+    var deferred = $q.defer();
+    httpSrvc.request(
+      "POST",
+      "users",
+      stringParams(info)
+      ).success(function(data){
+        if(data.code === 200){
+          console.log("regInfo: ", data);
+          deferred.resolve(data.data);
+        }else{
+          console.log("regInfo: ", data);
+          deferred.reject("注册失败");
+        }
+      }).error(function(data){
+        console.log("regInfo: ", data);
+        deferred.reject("暂时无法注册");
+      });
+    return deferred.promise
+  };
+
+  this.upInfo = function(info){
+    var deferred = $q.defer();
+    httpSrvc.request(
+      "PUT",
+      "users/"+info.uid,
+      stringParams(info)
+      ).success(function(data){
+        console.log("upInfo: ", data);
+        if(data.code === 200){
+          deferred.resolve(data.data);
+        }else{
+          console.log(data);
+          deferred.reject("注册失败");
+        }
+      }).error(function(data){
+        console.log("upInfo: ", data);
+        deferred.reject("暂时无法注册");
+      });
+    return deferred.promise
+  };
+
+
+  // 取出 base64 格式的图片中的图片格式
+  this.getImgExtention = function(base64Img){
+    var picExt = base64Img.match(/^data:image\/([A-Za-z]+);base64,/)[1];
+    if(picExt){
+      // 图片格式在 picExt index 1
+      return "." + picExt
+    }else{
+      return ".png"
+    };
+  };
+
+  // 生成图片名字
+  this.genImgName = function(base64Img){
+    var imgTime = new Date();
+    return CbAuthService.getUserCid()+"_"+imgTime.getTime()+this.getImgExtention(base64Img)
+  };
+
+  this.qiniuGetUpToken = function(imgName){
+    var deferred = $q.defer();
+    httpService.request(
+      "POST",
+      "qntokenPost",
+      {
+        imgName: imgName
+      }
+      ).success(function(data){
+        if(data.msg === 200){
+          console.log("SCC qn UpTokenInfo: ", data);
+          deferred.resolve(data.result);
+        }else{
+          console.log(data);
+          deferred.reject("获取七牛 token 失败！")
+        }
+
+      }).error(function(data){
+        deferred.reject("暂时无法获取七牛 token！");
+      });
+    return deferred.promise
+  };
+
+  this.qiniuUpload = function(base64Img, upToken, imgNameBase64){
+    indexOfComma = base64Img.search(/[,]/);
+    base64Img = base64Img.slice(indexOfComma+1, -1);
+    var deferred = $q.defer();
+    // 七牛 base64 图片上传接口说明 http://kb.qiniu.com/5rroxdgb
+    // POST /putb64/<Fsize>/key/<EncodedKey>/mimeType/<EncodedMimeType>/crc32/<Crc32>/x:user-var/<EncodedUserVarVal>
+    // url "http://up.qiniu.com/putb64/-1/key/"+imgNameBase64
+    // put64/ 后面跟图片大小，可以用 -1 直接用 request body 的大小
+    // key/ 后面跟图片名字的 urlsave_base64
+    httpService.requestQiniu(
+      "POST",
+      "http://up.qiniu.com/putb64/-1/key/"+imgNameBase64,
+      base64Img,
+      upToken
+      ).success(function(data){
+        deferred.resolve(data);
+      }).error(function(data){
+        console.log("FA qnUpload: ", data);
+        deferred.reject(data);
+      });
+    return deferred.promise
+
+  };
+
+  this.deepCopy= function(source) {
+    var result;
+    if (Object.prototype.toString.call(source) === '[object Array]'){
+      result=[];
+    }else{
+      result={};
+    }
+    for (var key in source) {
+          result[key] = typeof source[key]==='object'? deepCopyToNew(source[key]):source[key];
+    }
+    return result;
+  };
+
+
 
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.service('Chats', function($q) {
+.service('Chats', function($q, httpSrvc) {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
@@ -137,53 +268,54 @@ angular.module('starter.services', [])
 
   this.allChats = function(){
     var deferred = $q.defer();
-    // httpSrvc.request(
-    //   "GET",
-    //   "/rooms/00/users",
-    //   {}
-    //   ).success(function(data){
-    //     if(data.code === "200"){
-    //       deferred.resolve(data.data);
-    //     }else{
-    //       console.log(data.message);
-    //       deferred.reject("获取用户列表失败");
-    //     }
-    //   }).error(function(data){
-    //     deferred.reject("暂时无法获取用户列表");
-    //   });
-
-    deferred.resolve(this.chats);
-
+    httpSrvc.request(
+      "GET",
+      "rooms/sf-2015/users",
+      {}
+      ).success(function(data){
+        console.log("allChats: ", data);
+        if(data.code === 200){
+          deferred.resolve(data.data);
+        }else{
+          console.log(data.message);
+          deferred.reject("获取用户列表失败");
+        }
+      }).error(function(data){
+        console.log("allChats: ", data);
+        deferred.reject("暂时无法获取用户列表");
+      });
     return deferred.promise
   };
 
   this.getAChat = function(uid){
     var deferred = $q.defer();
 
-    // 静态
-    var rs = {}
-    this.chats.forEach(function(chat){
-      if(chat.uid == uid){
-        rs = chat;
-      };
-    });
-    deferred.resolve(rs);
+    // // 静态
+    // var rs = {}
+    // this.chats.forEach(function(chat){
+    //   if(chat.uid == uid){
+    //     rs = chat;
+    //   };
+    // });
+    // deferred.resolve(rs);
 
-    // // 拉后台
-    // httpSrvc.request(
-    //   "GET",
-    //   "/users/"+uid,
-    //   {}
-    //   ).success(function(data){
-    //     if(data.code === "200"){
-    //       deferred.resolve(data.data);
-    //     }else{
-    //       console.log(data.message);
-    //       deferred.reject("获取用户列表失败");
-    //     }
-    //   }).error(function(data){
-    //     deferred.reject("暂时无法获取用户列表");
-    //   });
+    // 拉后台
+    httpSrvc.request(
+      "GET",
+      "users/"+uid,
+      {}
+      ).success(function(data){
+        console.log("getAChat: ", data);
+        if(data.code === 200){
+          deferred.resolve(data.data);
+        }else{
+          console.log(data.message);
+          deferred.reject("获取用户列表失败");
+        }
+      }).error(function(data){
+        console.log("getAChat: ", data);
+        deferred.reject("暂时无法获取用户列表");
+      });
 
     return deferred.promise
 

@@ -35,6 +35,7 @@ angular.module('starter.services', [])
 .service('httpSrvc', function($http){
 
   var bbHost = ""
+  // var bbHost = "http://10.2.200.203:8080/api/"
 
   this.request = function(method, url, data) {
     console.log("httpRequest: ", data);
@@ -73,7 +74,7 @@ angular.module('starter.services', [])
 
     // httpSrvc.request(
     //   "POST",
-    //   "http://10.2.200.203:8080/api/rooms/sf-2015/verify",
+    //   "rooms/sf-2015/verify",
     //   {
     //     code: roomId
     //   }

@@ -1,0 +1,23 @@
+<ion-view view-title="信息">
+  <ion-content class="padding">
+    <div class="usr-info">
+      <div class="usr-face">
+        <img ng-src="{{chat.image}}">
+      </div>
+      <h1>{{chat.name}}</h1>
+      <h3>{{chat.title}}</h3>
+      <div class="usr-des">
+        <h6>我的想法或需求</h6>
+        <p>{{chat.info}}</p>
+      </div>
+      <div class="usr-loc">
+        <h6>如何找到我</h6>
+        <p>{{chat.location}}</p>
+      </div>
+      </p>
+    </div>
+    <div class="button-panel margin-t-lg">
+      <button class="button button-outline button-small button-round button-positive"><i class="icon ion-heart"></i>&nbsp;捅</button>
+    </div>
+  </ion-content>
+</ion-view>

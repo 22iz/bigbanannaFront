@@ -1,0 +1,53 @@
+<ion-modal-view view-cache="false">
+  <ion-content>
+    <div class="list list-inset" ng-if="!login.pureEdit">
+      <label class="item item-input">
+        <input type="text" ng-model="login.usrUid" placeholder="输入手机号去取回信息">
+      </label>
+    </div>
+    <div class="button-panel" ng-if="!login.pureEdit">
+      <button class="button button-outline button-small button-round" ng-click="login.getUsrInfo()">取回信息</button>
+    </div>
+    <div class="item input-pic">
+      <div class="input-pic-pre" style="background-image:url({{reg.image}})"></div>
+      <div class="button-panel">
+        <button class="button button-outline button-small button-round" ng-click="sPIC()">单击以选择图片</button>
+      </div>
+      <input
+        id = "srPIC"
+        type="file"
+        accept="image/*"
+        onchange="angular.element(this).scope().onFile(this.files[0])"
+        style="display:none"
+        capture="filesystem"
+      >
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <input type="text" ng-model="reg.name" placeholder="姓名" ng-disabled="login.status">
+      </label>
+      <label class="item item-input">
+        <input type="text" ng-model="reg.title" placeholder="头衔" ng-disabled="login.status">
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <textarea ng-model="reg.info" placeholder="你的想法或需求"></textarea>
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <textarea ng-model="reg.location" placeholder="如何找到你"></textarea>
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <input type="text" ng-model="reg.uid" placeholder="输入手机号以方便下次取回信息" ng-disabled="login.status">
+      </label>
+    </div>
+    <div class="button-panel">
+      <button class="button button-outline button-small button-round" ng-click="regInfo()" ng-if="!login.status">提交信息并进入</button>
+      <button class="button button-outline button-small button-round" ng-click="upInfo()" ng-if="login.status">修改信息并进入</button>
+    </div>
+  </ion-content>
+</ion-modal-view>

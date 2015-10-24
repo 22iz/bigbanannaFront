@@ -1,0 +1,34 @@
+<ion-view view-title="我" class="mine-view">
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-positive" ng-click="openModal('account', '')">编辑</button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-clear button-assertive" ng-click="ex()">退出</button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <div class="usr-info">
+      <div class="usr-face">
+        <img ng-src="{{usrInfo.image}}">
+      </div>
+      <h1>{{usrInfo.name}}</h1>
+      <h3>{{usrInfo.title}}</h3>
+      <div class="usr-des">
+        <h6>我的想法或需求</h6>
+        <p>{{usrInfo.info}}</p>
+      </div>
+      <div class="usr-loc">
+        <h6>如何找到我</h6>
+        <p>{{usrInfo.location}}</p>
+      </div>
+    </div>
+    <div class="usr-liked-panel clearfix">
+      <h6 class="usr-liked-title">捅我的人</h6>
+      <a class="usr-liked" ng-repeat="usr in pl" href="#/tab/account/{{chat.uid}}">
+        <div class="usr-liked-circle">
+          <img src="{{usr.image}}"/>
+        </div>
+        <div>{{usr.name}}</div>
+      </a>
+    </div>
+  </ion-content>
+</ion-view>

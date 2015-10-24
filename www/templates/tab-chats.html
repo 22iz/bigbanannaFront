@@ -12,8 +12,8 @@
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats | filter:sq" type="item-text-wrap" href="#/tab/chats/{{chat.uid}}">
         <img ng-src="{{chat.image}}">
         <h2>{{chat.name}}</h2>
-        <h6>{{chat.title}}</h6>
-        <p>我的想法或需求: {{chat.info}}</p>
+        <p>{{chat.title}}</p>
+        <!-- {{chat.info}} -->
         <i class="icon ion-chevron-right icon-accessory"></i>
         <ion-option-button class="button-positive" ng-click="remove(chat)">
           求认识

@@ -34,8 +34,13 @@ angular.module('starter.services', [])
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .service('httpSrvc', function($http){
 
-  // var bbHost = ""
-  var bbHost = "http://10.2.200.203:8080/api/"
+  // var bbHost = "";
+  // local
+  var bbHost = "http://10.2.200.203:8080/api/";
+  // release
+  // var bbHost = "http://127.0.0.1/api/";
+  // var bbHost = "/api/";
+
 
   this.request = function(method, url, data) {
     console.log("httpRequest: ", data);
@@ -79,7 +84,7 @@ angular.module('starter.services', [])
       ).success(function(data){
         if(data.code === 200){
           console.log("verify: ", data);
-          deferred.resolve(data.data);
+          deferred.resolve("验证成功");
         }else{
           console.log("verify: ", data);
           deferred.reject("验证房间失败");
@@ -151,14 +156,14 @@ angular.module('starter.services', [])
       ).success(function(data){
         console.log("usrEnterRoom: ", data);
         if(data.code === 200){
-          deferred.resolve(data.data);
+          deferred.resolve("进入房间成功");
         }else{
           console.log(data);
           deferred.reject("进入房间失败");
         };
       }).error(function(data){
          if(data.code === 409){
-            deferred.resolve(data.data);
+            deferred.resolve("进入房间成功");
          }else{
           console.log("usrEnterRoom: ", data);
           deferred.reject("暂时无法进入房间");          
@@ -176,14 +181,14 @@ angular.module('starter.services', [])
       ).success(function(data){
         console.log("usrExRoom: ", data);
         if(data.code === 200){
-          deferred.resolve(data.data);
+          deferred.resolve("退出房间成功");
         }else{
           console.log(data);
-          deferred.reject("推出房间失败");
+          deferred.reject("退出房间失败");
         }
       }).error(function(data){
         console.log("usrExRoom: ", data);
-        deferred.reject("暂时无法推出房间");
+        deferred.reject("暂时无法退出房间");
       });
     return deferred.promise
   };

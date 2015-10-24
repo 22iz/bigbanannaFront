@@ -22,7 +22,7 @@ angular.module('starter.controllers', [])
       ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
         // 更新登录状态（编辑状态）
         $scope.login.status = true;
-        NotificationService.set(msg, "warning");
+        NotificationService.set(enterMsg, "success");
         $state.go('tab.chats');
         $scope.modal.hide();
       },function(enterMsg){
@@ -45,7 +45,7 @@ angular.module('starter.controllers', [])
       // bind user uid
       ComSrvc.usrUid = $scope.reg.uid;
       ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
-        NotificationService.set(msg, "warning");
+        NotificationService.set(enterMsg, "success");
         $state.go('tab.chats');
         $scope.modal.hide();
       },function(enterMsg){
@@ -161,6 +161,7 @@ var loginPrototype = {
   getAllChats();
   $scope.doRefresh = function(){
     getAllChats();
+    $scope.$broadcast('scroll.refreshComplete');
   };
   $scope.remove = function(chat) {
     Chats.remove(chat);

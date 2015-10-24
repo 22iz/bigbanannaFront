@@ -1,5 +1,5 @@
 angular.module('starter.controllers', [])
-.controller('EnterCtrl', function($scope, $ionicModal, $state) {
+.controller('ComCtrl', function($scope, $ionicModal, $state){
   $scope.er = function() {
     $state.go('tab.chats');
     $scope.modal.hide();
@@ -29,6 +29,8 @@ angular.module('starter.controllers', [])
    // Execute action
  });
 })
+.controller('EnterCtrl', function($scope, $ionicModal, $state) {
+})
 .controller('ChatsCtrl', function($scope, $state, Chats) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -41,12 +43,12 @@ angular.module('starter.controllers', [])
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
-  $scope.ex = function() {
-    $state.go('enter');
-  }
 })
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $state) {
+  $scope.ex = function() {
+    $state.go('enter');
+  };
 });

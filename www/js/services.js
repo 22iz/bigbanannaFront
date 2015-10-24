@@ -26,9 +26,8 @@ angular.module('starter.services', [])
     console.log("roomId: ", roomId);
     var deferred = $q.defer();
     // httpSrvc.request(
-
-    //   "",
-    //   "",
+    //   "GET",
+    //   "http://10.2.200.203:8080/api/try",
     //   {}
     //   ).success(function(data){
     //     console.log("tryApi success: ", data);

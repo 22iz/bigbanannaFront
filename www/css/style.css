@@ -30,6 +30,12 @@ ion-item.item>a>p{
   width: 100%;
 }
 .input-pic-btn {
-  padding: 2px 5px;
+  display: inline-block;
+  margin: 0px auto 10px auto;
+  padding: 5px 10px;
+  color: #a0a0a0;
   border: 1px solid #ddd;
+  border-radius: 1000px;
+  font-size: 12px;
+  font-weight: bold;
 }

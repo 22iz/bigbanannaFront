@@ -2,6 +2,7 @@ angular.module('starter.controllers', [])
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, Cropper, ComSrvc, NotificationService, Chats){
+  $scope.imgHost = 'http://7xnrw2.com2.z0.glb.qiniucdn.com/';
   $rootScope.notification = {
 			typehood: "",
 			icon: "",

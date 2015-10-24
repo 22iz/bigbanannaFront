@@ -1,15 +1,22 @@
 <ion-view view-title="Hackathon">
   <ion-content>
+    <ion-refresher
+      pulling-text="下拉以刷新"
+      on-refresh="doRefresh()">
+    </ion-refresher>
     <ion-list>
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="搜索" ng-model="sq">
+      </label>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.uid}}">
         <img ng-src="{{chat.image}}">
         <h2>{{chat.name}}</h2>
         <h6>{{chat.title}}</h6>
         <p>我的想法或需求: {{chat.info}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
-
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
+        <ion-option-button class="button-positive" ng-click="remove(chat)">
+          求认识
         </ion-option-button>
       </ion-item>
     </ion-list>

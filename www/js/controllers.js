@@ -29,8 +29,9 @@ angular.module('starter.controllers', [])
    // Execute action
  });
  /* 图片 ---------------------------------------------------------------------*/
+var dPIC = "img/logo.png"
  $scope.reg = {
-   pic: undefined,
+   pic: dPIC,
  }
  $scope.sPIC = function() {
    angular.element('#srPIC').trigger("click");

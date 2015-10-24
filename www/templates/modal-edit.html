@@ -1,9 +1,6 @@
 <ion-modal-view view-cache="false">
   <ion-content>
-    <div class="list">
-      <div class="item item-divider">
-        取回介绍
-      </div>
+    <div class="list list-inset">
       <label class="item item-input">
         <input type="text" placeholder="唯一识别码">
       </label>
@@ -11,33 +8,34 @@
     <div class="button-panel">
       <button class="button button-outline button-small button-round">取回信息</button>
     </div>
-    <div class="list">
-      <div class="item item-divider">
-        编辑介绍
+    <div class="item input-pic">
+      <div class="input-pic-pre" style="background-image:url({{reg.pic}})"></div>
+      <div class="button-panel">
+        <button class="button button-outline button-small button-round" ng-click="sPIC()">单击以选择图片</button>
       </div>
-      <div class="input-pic">
-        <div class="input-pic-pre">
-          <img src="{{reg.pic}}" />
-        </div>
-        <div class="input-pic-btn" ng-click="sPIC()">单击以选择图片</div>
-        <input
-          id = "srPIC"
-          type="file"
-          accept="image/*"
-          onchange="angular.element(this).scope().onFile(this.files[0])"
-          style="display:none"
-          capture="filesystem"
-        >
-      </div>
+      <input
+        id = "srPIC"
+        type="file"
+        accept="image/*"
+        onchange="angular.element(this).scope().onFile(this.files[0])"
+        style="display:none"
+        capture="filesystem"
+      >
+    </div>
+    <div class="list list-inset">
       <label class="item item-input">
         <input type="text" placeholder="姓名">
       </label>
       <label class="item item-input">
         <input type="text" placeholder="头衔">
       </label>
+    </div>
+    <div class="list list-inset">
       <label class="item item-input">
         <textarea placeholder="你的想法或需求"></textarea>
       </label>
+    </div>
+    <div class="list list-inset">
       <label class="item item-input">
         <textarea placeholder="如何找到你"></textarea>
       </label>

@@ -16,15 +16,18 @@ angular.module('starter.controllers', [])
     //   .then(function(upTokenInfo){
     //     ComSrvc.qiniuUpload($scope.cbCardInfo.submitInfo.image, upTokenInfo["uptoken"], upTokenInfo["SaveKey"])
     //       .then(function(rsUp){
-    $scope.reg.image = "13700000000_42700000000000.png";
     ComSrvc.regInfo($scope.reg).then(function(msg){
       // bind user uid
       ComSrvc.usrUid = $scope.reg.uid;
-      // 更新登录状态（编辑状态）
-      $scope.login.status = true;
-      NotificationService.set(msg, "warning");
-      $state.go('tab.chats');
-      $scope.modal.hide();
+      ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
+        // 更新登录状态（编辑状态）
+        $scope.login.status = true;
+        NotificationService.set(msg, "warning");
+        $state.go('tab.chats');
+        $scope.modal.hide();
+      },function(enterMsg){
+        NotificationService.set(enterMsg, "warning");
+      });
     },function(msg){
       NotificationService.set(msg, "warning");
     });
@@ -39,9 +42,15 @@ angular.module('starter.controllers', [])
     //     ComSrvc.qiniuUpload($scope.cbCardInfo.submitInfo.image, upTokenInfo["uptoken"], upTokenInfo["SaveKey"])
     //       .then(function(rsUp){
     ComSrvc.upInfo($scope.reg).then(function(msg){
-      NotificationService.set(msg, "warning");
-      $state.go('tab.chats');
-      $scope.modal.hide();
+      // bind user uid
+      ComSrvc.usrUid = $scope.reg.uid;
+      ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
+        NotificationService.set(msg, "warning");
+        $state.go('tab.chats');
+        $scope.modal.hide();
+      },function(enterMsg){
+        NotificationService.set(enterMsg, "warning");
+      })
     },function(msg){
       NotificationService.set(msg, "warning");
     });
@@ -55,6 +64,8 @@ angular.module('starter.controllers', [])
  $scope.openModal = function(fromState, roomId) {
   if(fromState == "entry"){
     ComSrvc.enterRoom(roomId).then(function(rsEntry){
+     $scope.reg = ComSrvc.deepCopy(regPrototype);
+     $scope.login = ComSrvc.deepCopy(loginPrototype);
      $scope.modal.show();
     },function(rsEntry){
       // 全局提示
@@ -91,8 +102,7 @@ var regPrototype = {
   uid: '',
 };
  $scope.reg = ComSrvc.deepCopy(regPrototype);
-// 取回信息
- $scope.login = {
+var loginPrototype = {
   usrUid: '',
   getUsrInfo: function(){
     ComSrvc.usrUid = this.usrUid;
@@ -107,7 +117,9 @@ var regPrototype = {
   },
   status: false, // false 为注册按钮，true 为修改按钮
   pureEdit: false
- };
+};
+// 取回信息
+ $scope.login = ComSrvc.deepCopy(loginPrototype);
 
  $scope.sPIC = function() {
    angular.element('#srPIC').trigger("click");
@@ -136,14 +148,20 @@ var regPrototype = {
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ChatsCtrl', function($scope, $state, Chats) {
-  Chats.allChats().then(function(chats){
-    // 静态
-    // $scope.chats = Chats.chats;
-    // 动态
-    $scope.chats = chats;
-  },function(chats){
-    console.log(chats);
-  });
+  var getAllChats = function(){
+    Chats.allChats().then(function(chats){
+      // 静态
+      // $scope.chats = Chats.chats;
+      // 动态
+      $scope.chats = chats;
+    },function(chats){
+      console.log(chats);
+    });
+  };
+  getAllChats();
+  $scope.doRefresh = function(){
+    getAllChats();
+  };
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
@@ -159,14 +177,42 @@ var regPrototype = {
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('AccountCtrl', function($scope, $state, Chats, ComSrvc) {
+.controller('AccountCtrl', function($scope, $state, Chats, ComSrvc, NotificationService) {
+
   console.log("AccountCtrl: ", ComSrvc.usrUid);
+
+  $scope.pl = [
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    },
+    { name: 'HAHA',
+      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+    }
+  ];
+
   Chats.getAChat(ComSrvc.usrUid).then(function(chat){
     $scope.usrInfo = chat;
   },function(chat){
     console.log(chat);
   });
   $scope.ex = function() {
-    $state.go('enter');
+    ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid).then(function(msg){
+      $state.go('enter');
+    },function(msg){
+      $state.go('enter');
+      NotificationService.set(msg, "warning");
+    });
   };
 });

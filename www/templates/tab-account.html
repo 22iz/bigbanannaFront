@@ -1,4 +1,7 @@
-<ion-view view-title="我">
+<ion-view view-title="我" class="mine-view">
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-positive" ng-click="openModal('account', '')">编辑</button>
+  </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <button class="button button-clear button-assertive" ng-click="ex()">退出</button>
   </ion-nav-buttons>
@@ -17,10 +20,15 @@
         <h6>如何找到我</h6>
         <p>{{usrInfo.location}}</p>
       </div>
-      </p>
     </div>
-    <div class="button-panel margin-t-lg">
-      <button class="button button-outline button-small button-round button-positive" ng-click="openModal('account', '')">编辑</button>
+    <div class="usr-liked-panel clearfix">
+      <h6 class="usr-liked-title">捅我的人</h6>
+      <a class="usr-liked" ng-repeat="usr in pl" href="#/tab/account/{{chat.uid}}">
+        <div class="usr-liked-circle">
+          <img src="{{usr.image}}"/>
+        </div>
+        <div>{{usr.name}}</div>
+      </a>
     </div>
   </ion-content>
 </ion-view>

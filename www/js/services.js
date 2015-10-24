@@ -133,11 +133,57 @@ angular.module('starter.services', [])
           deferred.resolve(data.data);
         }else{
           console.log(data);
-          deferred.reject("注册失败");
+          deferred.reject("修改失败");
         }
       }).error(function(data){
         console.log("upInfo: ", data);
-        deferred.reject("暂时无法注册");
+        deferred.reject("暂时无法修改");
+      });
+    return deferred.promise
+  };
+
+  this.usrEnterRoom = function(roomId, usrUid){
+    var deferred = $q.defer();
+    httpSrvc.request(
+      "PUT",
+      "rooms/"+roomId+"/users/"+usrUid,
+      {}
+      ).success(function(data){
+        console.log("usrEnterRoom: ", data);
+        if(data.code === 200){
+          deferred.resolve(data.data);
+        }else{
+          console.log(data);
+          deferred.reject("进入房间失败");
+        };
+      }).error(function(data){
+         if(data.code === 409){
+            deferred.resolve(data.data);
+         }else{
+          console.log("usrEnterRoom: ", data);
+          deferred.reject("暂时无法进入房间");          
+         };
+      });
+    return deferred.promise
+  };
+
+  this.usrExRoom = function(roomId, usrUid){
+    var deferred = $q.defer();
+    httpSrvc.request(
+      "DELETE",
+      "rooms/"+roomId+"/users/"+usrUid,
+      {}
+      ).success(function(data){
+        console.log("usrExRoom: ", data);
+        if(data.code === 200){
+          deferred.resolve(data.data);
+        }else{
+          console.log(data);
+          deferred.reject("推出房间失败");
+        }
+      }).error(function(data){
+        console.log("usrExRoom: ", data);
+        deferred.reject("暂时无法推出房间");
       });
     return deferred.promise
   };

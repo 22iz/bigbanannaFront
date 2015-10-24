@@ -1,8 +1,8 @@
 angular.module('starter.controllers', [])
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, Cropper, ComSrvc, NotificationService, Chats){
-  $scope.imgHost = 'http://7xnrw2.com2.z0.glb.qiniucdn.com/';
+.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, ComSrvc, NotificationService, Chats){
+  $scope.iH = 'http://7xnrw2.com2.z0.glb.qiniucdn.com/';
   $rootScope.notification = {
 			typehood: "",
 			icon: "",
@@ -48,7 +48,7 @@ angular.module('starter.controllers', [])
       ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
         NotificationService.set(enterMsg, "success");
         if(!pureEdit){
-          $state.go('tab.chats');          
+          $state.go('tab.chats');
         };
         $scope.modal.hide();
       },function(enterMsg){
@@ -66,17 +66,18 @@ angular.module('starter.controllers', [])
  });
  $scope.openModal = function(fromState, roomId) {
   if(fromState == "entry"){
-    ComSrvc.enterRoom(roomId).then(function(rsEntry){
-     $scope.reg = ComSrvc.deepCopy(regPrototype);
-     $scope.login = ComSrvc.deepCopy(loginPrototype);
-     $scope.modal.show();
-    },function(rsEntry){
-      // 全局提示
-      NotificationService.set(rsEntry, "warning");
-    })
-  }else if(fromState == "account"){
-    $scope.login.pureEdit = true;
-   $scope.modal.show();
+    $scope.modal.show();
+  //   ComSrvc.enterRoom(roomId).then(function(rsEntry){
+  //    $scope.reg = ComSrvc.deepCopy(regPrototype);
+  //    $scope.login = ComSrvc.deepCopy(loginPrototype);
+  //    $scope.modal.show();
+  //   },function(rsEntry){
+  //     // 全局提示
+  //     NotificationService.set(rsEntry, "warning");
+  //   })
+  // }else if(fromState == "account"){
+  //   $scope.login.pureEdit = true;
+  //  $scope.modal.show();
   }
  };
  $scope.closeModal = function() {
@@ -94,10 +95,8 @@ angular.module('starter.controllers', [])
  $scope.$on('modal.removed', function() {
    // Execute action
  });
- /* 图片 ----------------------------------------------------------------------*/
-var dPIC = "img/logo.png"
 var regPrototype = {
-  image: dPIC,
+  image: '',
   name: '',
   title: '',
   info: '',
@@ -123,18 +122,9 @@ var loginPrototype = {
 };
 // 取回信息
  $scope.login = ComSrvc.deepCopy(loginPrototype);
-
+ $scope.reg.image = $scope.iH + (parseInt(Math.random()*100)%20+1) + ".png";
  $scope.sPIC = function() {
-   angular.element('#srPIC').trigger("click");
- };
- $scope.onFile = function(blob) {
-   if (blob) {
-     Cropper.encode((file = blob)).then(function(dataUrl) {
-       $scope.reg.image = dataUrl;
-     });
-   } else {
-    $scope.reg.image = dPIC;
-   };
+   $scope.reg.image = $scope.iH + (parseInt(Math.random()*100)%20+1) + ".png";
  };
  /* 通知 ----------------------------------------------------------------------*/
 

@@ -1,5 +1,6 @@
 <ion-modal-view view-cache="false">
   <ion-content>
+    <div class="nt">您可以输入手机号码取回曾经填写的信息</div>
     <div class="list list-inset" ng-if="!login.pureEdit">
       <label class="item item-input">
         <input type="text" ng-model="login.usrUid" placeholder="输入手机号去取回信息">
@@ -11,16 +12,8 @@
     <div class="item input-pic">
       <div class="input-pic-pre" style="background-image:url({{reg.image}})"></div>
       <div class="button-panel">
-        <button class="button button-outline button-small button-round" ng-click="sPIC()">单击以选择图片</button>
+        <button class="button button-outline button-small button-round" ng-click="sPIC()">随机更换</button>
       </div>
-      <input
-        id = "srPIC"
-        type="file"
-        accept="image/*"
-        onchange="angular.element(this).scope().onFile(this.files[0])"
-        style="display:none"
-        capture="filesystem"
-      >
     </div>
     <div class="list list-inset">
       <label class="item item-input">

@@ -15,3 +15,21 @@ textarea{
 ion-item.item>a>p{
   white-space: normal;
 }
+.input-pic {
+  text-align: center;
+}
+.input-pic-pre {
+  width: 150px;
+  height: 150px;
+  border-radius: 1000px;
+  border: 5px solid #ddd;
+  overflow: hidden;
+  margin: 10px auto;
+}
+.input-pic-pre img {
+  width: 100%;
+}
+.input-pic-btn {
+  padding: 2px 5px;
+  border: 1px solid #ddd;
+}

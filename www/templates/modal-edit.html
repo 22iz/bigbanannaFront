@@ -15,6 +15,20 @@
       <div class="item item-divider">
         编辑介绍
       </div>
+      <div class="input-pic">
+        <div class="input-pic-pre">
+          <img src="{{reg.pic}}" />
+        </div>
+        <div clsss="input-pic-btn" ng-click="sPIC()">单击以选择图片</div>
+        <input
+          id = "srPIC"
+          type="file"
+          accept="image/*"
+          onchange="angular.element(this).scope().onFile(this.files[0])"
+          style="display:none"
+          capture="filesystem"
+        >
+      </div>
       <label class="item item-input">
         <input type="text" placeholder="姓名">
       </label>

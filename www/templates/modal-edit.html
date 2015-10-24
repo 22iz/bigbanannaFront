@@ -47,7 +47,7 @@
     </div>
     <div class="button-panel">
       <button class="button button-outline button-small button-round" ng-click="regInfo()" ng-if="!login.status">提交信息并进入</button>
-      <button class="button button-outline button-small button-round" ng-click="upInfo()" ng-if="login.status">修改信息并进入</button>
+      <button class="button button-outline button-small button-round" ng-click="upInfo(login.pureEdit)" ng-if="login.status">修改信息并进入</button>
     </div>
   </ion-content>
 </ion-modal-view>

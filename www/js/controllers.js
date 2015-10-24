@@ -33,7 +33,7 @@ angular.module('starter.controllers', [])
     });
   };
 
-  $scope.upInfo = function() {
+  $scope.upInfo = function(pureEdit) {
     // // 七牛上传图片返回地址
     // var imgName = ComSrvc.genImgName($scope.reg.image);
     // console.log(imgName);
@@ -46,7 +46,9 @@ angular.module('starter.controllers', [])
       ComSrvc.usrUid = $scope.reg.uid;
       ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
         NotificationService.set(enterMsg, "success");
-        $state.go('tab.chats');
+        if(!pureEdit){
+          $state.go('tab.chats');          
+        };
         $scope.modal.hide();
       },function(enterMsg){
         NotificationService.set(enterMsg, "warning");

@@ -36,10 +36,10 @@ angular.module('starter.services', [])
 
   // var bbHost = "";
   // local
-  var bbHost = "http://10.2.200.203:8080/api/";
+  // var bbHost = "http://10.2.200.203:8080/api/";
   // release
   // var bbHost = "http://127.0.0.1/api/";
-  // var bbHost = "/api/";
+  var bbHost = "/api/";
 
 
   this.request = function(method, url, data) {

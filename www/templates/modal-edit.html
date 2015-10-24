@@ -1,11 +1,11 @@
 <ion-modal-view view-cache="false">
   <ion-content>
-    <div class="list list-inset">
+    <div class="list list-inset" ng-if="!login.pureEdit">
       <label class="item item-input">
         <input type="text" ng-model="login.usrUid" placeholder="输入手机号去取回信息">
       </label>
     </div>
-    <div class="button-panel">
+    <div class="button-panel" ng-if="!login.pureEdit">
       <button class="button button-outline button-small button-round" ng-click="login.getUsrInfo()">取回信息</button>
     </div>
     <div class="item input-pic">
@@ -24,10 +24,10 @@
     </div>
     <div class="list list-inset">
       <label class="item item-input">
-        <input type="text" ng-model="reg.name" placeholder="姓名">
+        <input type="text" ng-model="reg.name" placeholder="姓名" ng-disabled="login.status">
       </label>
       <label class="item item-input">
-        <input type="text" ng-model="reg.title" placeholder="头衔">
+        <input type="text" ng-model="reg.title" placeholder="头衔" ng-disabled="login.status">
       </label>
     </div>
     <div class="list list-inset">
@@ -42,11 +42,12 @@
     </div>
     <div class="list list-inset">
       <label class="item item-input">
-        <input type="text" ng-model="reg.pn" placeholder="输入手机号以方便下次取回信息">
+        <input type="text" ng-model="reg.uid" placeholder="输入手机号以方便下次取回信息" ng-disabled="login.status">
       </label>
     </div>
     <div class="button-panel">
-      <button class="button button-outline button-small button-round" ng-click="er()">注册并进入</button>
+      <button class="button button-outline button-small button-round" ng-click="regInfo()" ng-if="!login.status">提交信息并进入</button>
+      <button class="button button-outline button-small button-round" ng-click="upInfo()" ng-if="login.status">修改信息并进入</button>
     </div>
   </ion-content>
 </ion-modal-view>

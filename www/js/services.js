@@ -344,6 +344,7 @@ angular.module('starter.services', [])
 
   this.getAChat = function(uid){
     var deferred = $q.defer();
+    console.log(uid);
 
     // // 静态
     // var rs = {}

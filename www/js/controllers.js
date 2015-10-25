@@ -192,7 +192,6 @@ var loginPrototype = {
   ];
 
   var getAChat = function(){
-    console.log(ComSrvc.usrUid);
     Chats.getAChat(ComSrvc.usrUid).then(function(chat){
       $scope.usrInfo = chat;
     },function(chat){

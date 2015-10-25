@@ -344,7 +344,6 @@ angular.module('starter.services', [])
 
   this.getAChat = function(uid){
     var deferred = $q.defer();
-    console.log(uid);
 
     // // 静态
     // var rs = {}
@@ -385,7 +384,7 @@ angular.module('starter.services', [])
     var deferred = $q.defer();
     httpSrvc.request(
       "PUT",
-      "users/"+pokeId+"/pokes/"+usrUid,
+      "users/"+usrUid+"/pokes/"+pokeId,
       {}
       ).success(function(data){
         console.log("poke: ", data);

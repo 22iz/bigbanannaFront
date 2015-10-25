@@ -92,8 +92,12 @@ angular.module('starter.services', [])
           deferred.reject("验证房间失败");
         }
       }).error(function(data){
-        console.log("verify: ", data);
-        deferred.reject("验证房间失败");
+        if(data.code === 409){
+          deferred.resolve("验证成功");
+        }else{
+          console.log("verify: ", data);
+          deferred.reject("验证房间失败");
+        };
       });
     return deferred.promise
   };

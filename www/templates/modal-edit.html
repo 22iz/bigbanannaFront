@@ -1,6 +1,6 @@
 <ion-modal-view view-cache="false">
   <ion-content>
-    <div class="nt">您可以输入手机号码取回曾经填写的信息</div>
+    <div class="nt" ng-if="!login.pureEdit">您可以输入手机号码取回曾经填写的信息</div>
     <div class="list list-inset" ng-if="!login.pureEdit">
       <label class="item item-input">
         <input type="tel" ng-model="login.usrUid" placeholder="输入手机号去取回信息">
@@ -40,7 +40,7 @@
     </div>
     <div class="button-panel">
       <button class="button button-outline button-small button-round button-positive" ng-click="regInfo()" ng-if="!login.status">提交信息并进入</button>
-      <button class="button button-outline button-small button-round button-positive" ng-click="upInfo(login.pureEdit)" ng-if="login.status">修改信息并进入</button>
+      <button class="button button-outline button-small button-round button-positive" ng-click="upInfo(login.pureEdit)" ng-if="login.status">确定信息</button>
     </div>
   </ion-content>
 </ion-modal-view>

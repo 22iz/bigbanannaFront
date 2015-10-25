@@ -1,3 +1,17 @@
+.user-list ion-item {
+  margin: 5px 2px;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px #efefef;
+}
+.item-avatar img {
+  border: 2px solid #ddd;
+}
+@media (min-width: 680px){
+  ion-modal-view {
+    top: 10px!important;
+    height: 100%!important;
+  }
+}
 .room-info {
   margin-top: 20px;
   text-align: center;
@@ -10,9 +24,14 @@
 .room-info p {
   font-size: 12px;
   color: #a0a0a0;
+  margin: 0px;
+}
+.room-info h1 {
+  color: #a0a0a0;
+  margin: 0px 0px 10px 0px;
 }
 .room-login {
-  width: 60%;
+  width: 58%;
   margin: 0px auto 60px auto;
 }
 .nt {

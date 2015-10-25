@@ -1,9 +1,9 @@
 <ion-modal-view view-cache="false">
   <ion-content>
-    <div class="nt" ng-if="!login.pureEdit">您可以输入手机号码取回曾经填写的信息</div>
+    <div class="nt" ng-if="!login.pureEdit">旧用户输入手机号码取回曾经填写的信息</div>
     <div class="list list-inset" ng-if="!login.pureEdit">
       <label class="item item-input">
-        <input type="tel" ng-model="login.usrUid" placeholder="输入手机号去取回信息">
+        <input type="tel" ng-model="login.usrUid" placeholder="输入手机号取回信息">
       </label>
     </div>
     <div class="button-panel" ng-if="!login.pureEdit">
@@ -25,7 +25,7 @@
     </div>
     <div class="list list-inset">
       <label class="item item-input">
-        <textarea ng-model="reg.info" placeholder="你的想法或需求"></textarea>
+        <textarea ng-model="reg.info" placeholder="你的简介想法或需求"></textarea>
       </label>
     </div>
     <div class="list list-inset">

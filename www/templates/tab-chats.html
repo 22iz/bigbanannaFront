@@ -1,10 +1,10 @@
-<ion-view view-title="Hackathon">
+<ion-view view-title="sf.H4CK3R">
   <ion-content>
     <ion-refresher
       pulling-text="下拉以刷新"
       on-refresh="doRefresh()">
     </ion-refresher>
-    <ion-list>
+    <ion-list class="user-list">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
         <input type="text" placeholder="搜索" ng-model="sq">
@@ -15,7 +15,7 @@
         <p>{{chat.title}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
         <ion-option-button class="button-positive" ng-click="poke(chat.uid)">
-          &nbsp;&nbsp捅
+          <i class="icon ion-heart"></i>
         </ion-option-button>
       </ion-item>
     </ion-list>

@@ -45,7 +45,7 @@ angular.module('starter', ['ionic','starter.controllers','starter.services','ngI
   // Each state's controller can be found in controllers.js
 
   // 缓存设置
-  $ionicConfigProvider.views.maxCache(0);
+  $ionicConfigProvider.views.maxCache(1);
 
   $stateProvider
   .state('enter', {

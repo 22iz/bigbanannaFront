@@ -382,9 +382,10 @@ angular.module('starter.services', [])
   this.poke = function(usrUid, pokeId){
 
     var deferred = $q.defer();
+    console.log('user id: ' + usrUid, 'poke id: ' + pokeId);
     httpSrvc.request(
       "PUT",
-      "users/"+usrUid+"/pokes/"+pokeId,
+      "users/"+pokeId+"/pokes/"+usrUid,
       {}
       ).success(function(data){
         console.log("poke: ", data);

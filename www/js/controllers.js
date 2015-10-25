@@ -17,6 +17,7 @@ angular.module('starter.controllers', [])
       ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid()).then(function(enterMsg){
         // 更新登录状态（编辑状态）
         $scope.login.status = true;
+        localStorageService.set("login:status", true);
         NotificationService.set(enterMsg, "success");
         $state.go('tab.chats');
         $scope.modal.hide();
@@ -61,14 +62,23 @@ angular.module('starter.controllers', [])
     ComSrvc.enterRoom(roomId).then(function(rsEntry){
      $scope.reg = ComSrvc.deepCopy(regPrototype);
      $scope.login = ComSrvc.deepCopy(loginPrototype);
+     $scope.login.pureEdit = false;
+     $scope.login.status = false;
      $scope.modal.show();
     },function(rsEntry){
       // 全局提示
       NotificationService.set(rsEntry, "warning");
     })
   }else if(fromState == "account"){
-    $scope.login.pureEdit = true;
-   $scope.modal.show();
+    Chats.getAChat(ComSrvc.usrUid()).then(function(chat){
+      // $scope.login.pureEdit = true;
+      $scope.login.pureEdit = true;
+      localStorageService.set("login:pureEdit", true);
+      $scope.reg = chat;
+      $scope.modal.show();
+    },function(chat){
+      NotificationService.set("暂时无法编辑");
+    });    
   }
  };
  $scope.closeModal = function() {
@@ -96,6 +106,9 @@ var regPrototype = {
   uid: '',
 };
  $scope.reg = ComSrvc.deepCopy(regPrototype);
+if(localStorageService.get("login:pureEdit")){
+
+}
 var loginPrototype = {
   usrUid: '',
   getUsrInfo: function(){
@@ -105,14 +118,15 @@ var loginPrototype = {
       NotificationService.set("取回成功", "success");
       // 如果有信息把按钮变成修改按钮
       $scope.login.status = true;
+      localStorageService.set("login:status", true);
       $scope.reg = chat;
     },function(chat){
       NotificationService.set("没有该用户", "warning");
      $scope.reg = ComSrvc.deepCopy(regPrototype);
     });
   },
-  status: false, // false 为注册按钮，true 为修改按钮
-  pureEdit: false
+  status: localStorageService.get("login:status"), // false 为注册按钮，true 为修改按钮
+  pureEdit: localStorageService.get("login:pureEdit") || false
 };
 // 取回信息
  $scope.login = ComSrvc.deepCopy(loginPrototype);
@@ -169,7 +183,7 @@ var loginPrototype = {
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('AccountCtrl', function($rootScope, $scope, $state, Chats, ComSrvc, NotificationService) {
+.controller('AccountCtrl', function($rootScope, $scope, $state, Chats, ComSrvc, NotificationService, localStorageService) {
 
   var getAChat = function(){
     Chats.getAChat(ComSrvc.usrUid()).then(function(chat){
@@ -191,6 +205,7 @@ var loginPrototype = {
 
   $scope.ex = function() {
     ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid()).then(function(msg){
+      localStorageService.clearAll();
       $state.go('enter');
     },function(msg){
       $state.go('enter');

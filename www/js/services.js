@@ -264,7 +264,7 @@ angular.module('starter.services', [])
 
   };
 
-  this.deepCopy= function(source) {
+  var deepCopyToNew= function(source) {
     var result;
     if (Object.prototype.toString.call(source) === '[object Array]'){
       result=[];
@@ -275,6 +275,9 @@ angular.module('starter.services', [])
           result[key] = typeof source[key]==='object'? deepCopyToNew(source[key]):source[key];
     }
     return result;
+  };
+  this.deepCopy= function(source) {
+      return deepCopyToNew(source);
   };
 
 

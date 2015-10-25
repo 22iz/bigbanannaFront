@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, ComSrvc, NotificationService, Chats){
+.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, ComSrvc, NotificationService, Chats, localStorageService){
   $scope.iH = 'http://7xnrw2.com2.z0.glb.qiniucdn.com/';
   $rootScope.notification = {
 			typehood: "",
@@ -12,10 +12,12 @@ angular.module('starter.controllers', [])
   $scope.regInfo = function() {
     ComSrvc.regInfo($scope.reg).then(function(msg){
       // bind user uid
-      ComSrvc.usrUid = $scope.reg.uid;
-      ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
+      // ComSrvc.usrUid = $scope.reg.uid;
+      localStorageService.set("usrUid", $scope.reg.uid);
+      ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid()).then(function(enterMsg){
         // 更新登录状态（编辑状态）
         $scope.login.status = true;
+        localStorageService.set("login:status", true);
         NotificationService.set(enterMsg, "success");
         $state.go('tab.chats');
         $scope.modal.hide();
@@ -31,8 +33,9 @@ angular.module('starter.controllers', [])
     ComSrvc.upInfo($scope.reg).then(function(msg){
       if(!pureEdit){
         // bind user uid
-        ComSrvc.usrUid = $scope.reg.uid;
-        ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
+        // ComSrvc.usrUid = $scope.reg.uid;
+        localStorageService.set("usrUid", $scope.reg.uid);
+        ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid()).then(function(enterMsg){
           NotificationService.set(enterMsg, "success");
           $state.go('tab.chats');
           $scope.modal.hide();
@@ -59,14 +62,23 @@ angular.module('starter.controllers', [])
     ComSrvc.enterRoom(roomId).then(function(rsEntry){
      $scope.reg = ComSrvc.deepCopy(regPrototype);
      $scope.login = ComSrvc.deepCopy(loginPrototype);
+     $scope.login.pureEdit = false;
+     $scope.login.status = false;
      $scope.modal.show();
     },function(rsEntry){
       // 全局提示
       NotificationService.set(rsEntry, "warning");
     })
   }else if(fromState == "account"){
-    $scope.login.pureEdit = true;
-   $scope.modal.show();
+    Chats.getAChat(ComSrvc.usrUid()).then(function(chat){
+      // $scope.login.pureEdit = true;
+      $scope.login.pureEdit = true;
+      localStorageService.set("login:pureEdit", true);
+      $scope.reg = chat;
+      $scope.modal.show();
+    },function(chat){
+      NotificationService.set("暂时无法编辑");
+    });    
   }
  };
  $scope.closeModal = function() {
@@ -94,22 +106,27 @@ var regPrototype = {
   uid: '',
 };
  $scope.reg = ComSrvc.deepCopy(regPrototype);
+if(localStorageService.get("login:pureEdit")){
+
+}
 var loginPrototype = {
   usrUid: '',
   getUsrInfo: function(){
-    ComSrvc.usrUid = this.usrUid;
-    Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+    // ComSrvc.usrUid = this.usrUid;
+    localStorageService.set("usrUid", this.usrUid);
+    Chats.getAChat(ComSrvc.usrUid()).then(function(chat){
       NotificationService.set("取回成功", "success");
       // 如果有信息把按钮变成修改按钮
       $scope.login.status = true;
+      localStorageService.set("login:status", true);
       $scope.reg = chat;
     },function(chat){
       NotificationService.set("没有该用户", "warning");
      $scope.reg = ComSrvc.deepCopy(regPrototype);
     });
   },
-  status: false, // false 为注册按钮，true 为修改按钮
-  pureEdit: false
+  status: localStorageService.get("login:status"), // false 为注册按钮，true 为修改按钮
+  pureEdit: localStorageService.get("login:pureEdit") || false
 };
 // 取回信息
  $scope.login = ComSrvc.deepCopy(loginPrototype);
@@ -119,7 +136,7 @@ var loginPrototype = {
  /* 通知 ----------------------------------------------------------------------*/
 
  $scope.poke = function(pokeId) {
-   Chats.poke(ComSrvc.usrUid, pokeId).then(function(pMsg){
+   Chats.poke(ComSrvc.usrUid(), pokeId).then(function(pMsg){
      NotificationService.set(pMsg, "success");
    },function(pMsg){
      NotificationService.set(pMsg, "warning");
@@ -140,7 +157,7 @@ var loginPrototype = {
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ChatsCtrl', function($scope, $state, Chats, ComSrvc, NotificationService) {
   var getAllChats = function(){
-    Chats.allChats().then(function(chats){
+    Chats.allChats(ComSrvc.usrUid()).then(function(chats){
       // 静态
       // $scope.chats = Chats.chats;
       // 动态
@@ -166,33 +183,10 @@ var loginPrototype = {
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('AccountCtrl', function($rootScope, $scope, $state, Chats, ComSrvc, NotificationService) {
-
-  console.log("AccountCtrl: ", ComSrvc.usrUid);
-
-  $scope.pl = [
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    }
-  ];
+.controller('AccountCtrl', function($rootScope, $scope, $state, Chats, ComSrvc, NotificationService, localStorageService) {
 
   var getAChat = function(){
-    Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+    Chats.getAChat(ComSrvc.usrUid()).then(function(chat){
       $scope.usrInfo = chat;
     },function(chat){
       console.log(chat);
@@ -203,14 +197,15 @@ var loginPrototype = {
     getAChat();
   });
 
-  Chats.getPokes(ComSrvc.usrUid).then(function(mPokes){
+  Chats.getPokes(ComSrvc.usrUid()).then(function(mPokes){
     $scope.pl = mPokes;
   },function(mPokes){
     NotificationService.set(mPokes, "warning");
   })
 
   $scope.ex = function() {
-    ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid).then(function(msg){
+    ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid()).then(function(msg){
+      localStorageService.clearAll();
       $state.go('enter');
     },function(msg){
       $state.go('enter');

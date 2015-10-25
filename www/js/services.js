@@ -57,9 +57,11 @@ angular.module('starter.services', [])
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.service('ComSrvc', function($q, httpSrvc){
+.service('ComSrvc', function($q, httpSrvc, localStorageService){
 
-  this.usrUid = 0;
+  this.usrUid = function(){
+    return localStorageService.get("usrUid");
+  };
 
   this.enterRoom = function(roomId){
     console.log("roomId: ", roomId);
@@ -91,7 +93,7 @@ angular.module('starter.services', [])
         }
       }).error(function(data){
         console.log("verify: ", data);
-        deferred.reject("暂时无法验证房间");
+        deferred.reject("验证房间失败");
       });
     return deferred.promise
   };
@@ -262,7 +264,7 @@ angular.module('starter.services', [])
 
   };
 
-  this.deepCopy= function(source) {
+  var deepCopyToNew= function(source) {
     var result;
     if (Object.prototype.toString.call(source) === '[object Array]'){
       result=[];
@@ -274,6 +276,9 @@ angular.module('starter.services', [])
     }
     return result;
   };
+  this.deepCopy= function(source) {
+      return deepCopyToNew(source);
+  };
 
 
 
@@ -284,48 +289,48 @@ angular.module('starter.services', [])
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  this.chats = [{
-      uid: 0,
-      name: 'Ben Sparrow',
-      title: "ceo",
-      info: 'You on your way?',
-      location: '13700000000',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    }, {
-      uid: 1,
-      name: 'Max Lynx',
-      title: "ceo",
-      info: 'Hey, it\'s me',
-      location: '13700000000',
-      image: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-    }, {
-      uid: 2,
-      name: 'Adam Bradleyson',
-      title: "ceo",
-      info: 'I should buy a boat',
-      location: '13700000000',
-      image: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
-    }, {
-      uid: 3,
-      name: 'Perry Governor',
-      title: "ceo",
-      info: 'Look at my mukluks!',
-      location: '13700000000',
-      image: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
-    }, {
-      uid: 4,
-      name: 'Mike Harrington',
-      title: "ceo",
-      info: 'This is wicked good ice cream.',
-      location: '13700000000',
-      image: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
-    }];
+  // this.chats = [{
+  //     uid: 0,
+  //     name: 'Ben Sparrow',
+  //     title: "ceo",
+  //     info: 'You on your way?',
+  //     location: '13700000000',
+  //     image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+  //   }, {
+  //     uid: 1,
+  //     name: 'Max Lynx',
+  //     title: "ceo",
+  //     info: 'Hey, it\'s me',
+  //     location: '13700000000',
+  //     image: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  //   }, {
+  //     uid: 2,
+  //     name: 'Adam Bradleyson',
+  //     title: "ceo",
+  //     info: 'I should buy a boat',
+  //     location: '13700000000',
+  //     image: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
+  //   }, {
+  //     uid: 3,
+  //     name: 'Perry Governor',
+  //     title: "ceo",
+  //     info: 'Look at my mukluks!',
+  //     location: '13700000000',
+  //     image: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
+  //   }, {
+  //     uid: 4,
+  //     name: 'Mike Harrington',
+  //     title: "ceo",
+  //     info: 'This is wicked good ice cream.',
+  //     location: '13700000000',
+  //     image: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
+  //   }];
 
-  this.allChats = function(){
+  this.allChats = function(usrUid){
     var deferred = $q.defer();
     httpSrvc.request(
       "GET",
-      "rooms/sf-2015/users",
+      "rooms/sf-2015/users?user="+usrUid,
       {}
       ).success(function(data){
         console.log("allChats: ", data);
@@ -382,9 +387,10 @@ angular.module('starter.services', [])
   this.poke = function(usrUid, pokeId){
 
     var deferred = $q.defer();
+    console.log('user id: ' + usrUid, 'poke id: ' + pokeId);
     httpSrvc.request(
       "PUT",
-      "users/"+usrUid+"/pokes/"+pokeId,
+      "users/"+pokeId+"/pokes/"+usrUid,
       {}
       ).success(function(data){
         console.log("poke: ", data);

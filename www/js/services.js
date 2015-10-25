@@ -384,7 +384,7 @@ angular.module('starter.services', [])
     var deferred = $q.defer();
     httpSrvc.request(
       "PUT",
-      "users/"+usrUid+"/pokes/"+pokeId,
+      "users/"+pokeId+"/pokes/"+usrUid,
       {}
       ).success(function(data){
         console.log("poke: ", data);

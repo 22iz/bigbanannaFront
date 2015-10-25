@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, ComSrvc, NotificationService, Chats){
+.controller('ComCtrl', function($scope, $rootScope,$ionicModal, $state, ComSrvc, NotificationService, Chats, localStorageService){
   $scope.iH = 'http://7xnrw2.com2.z0.glb.qiniucdn.com/';
   $rootScope.notification = {
 			typehood: "",
@@ -12,8 +12,9 @@ angular.module('starter.controllers', [])
   $scope.regInfo = function() {
     ComSrvc.regInfo($scope.reg).then(function(msg){
       // bind user uid
-      ComSrvc.usrUid = $scope.reg.uid;
-      ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
+      // ComSrvc.usrUid = $scope.reg.uid;
+      localStorageService.set("usrUid", $scope.reg.uid);
+      ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid()).then(function(enterMsg){
         // 更新登录状态（编辑状态）
         $scope.login.status = true;
         NotificationService.set(enterMsg, "success");
@@ -31,8 +32,9 @@ angular.module('starter.controllers', [])
     ComSrvc.upInfo($scope.reg).then(function(msg){
       if(!pureEdit){
         // bind user uid
-        ComSrvc.usrUid = $scope.reg.uid;
-        ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid).then(function(enterMsg){
+        // ComSrvc.usrUid = $scope.reg.uid;
+        localStorageService.set("usrUid", $scope.reg.uid);
+        ComSrvc.usrEnterRoom('sf-2015', ComSrvc.usrUid()).then(function(enterMsg){
           NotificationService.set(enterMsg, "success");
           $state.go('tab.chats');
           $scope.modal.hide();
@@ -97,8 +99,9 @@ var regPrototype = {
 var loginPrototype = {
   usrUid: '',
   getUsrInfo: function(){
-    ComSrvc.usrUid = this.usrUid;
-    Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+    // ComSrvc.usrUid = this.usrUid;
+    localStorageService.set("usrUid", this.usrUid);
+    Chats.getAChat(ComSrvc.usrUid()).then(function(chat){
       NotificationService.set("取回成功", "success");
       // 如果有信息把按钮变成修改按钮
       $scope.login.status = true;
@@ -119,7 +122,7 @@ var loginPrototype = {
  /* 通知 ----------------------------------------------------------------------*/
 
  $scope.poke = function(pokeId) {
-   Chats.poke(ComSrvc.usrUid, pokeId).then(function(pMsg){
+   Chats.poke(ComSrvc.usrUid(), pokeId).then(function(pMsg){
      NotificationService.set(pMsg, "success");
    },function(pMsg){
      NotificationService.set(pMsg, "warning");
@@ -140,7 +143,7 @@ var loginPrototype = {
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ChatsCtrl', function($scope, $state, Chats, ComSrvc, NotificationService) {
   var getAllChats = function(){
-    Chats.allChats().then(function(chats){
+    Chats.allChats(ComSrvc.usrUid()).then(function(chats){
       // 静态
       // $scope.chats = Chats.chats;
       // 动态
@@ -168,31 +171,8 @@ var loginPrototype = {
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('AccountCtrl', function($rootScope, $scope, $state, Chats, ComSrvc, NotificationService) {
 
-  console.log("AccountCtrl: ", ComSrvc.usrUid);
-
-  $scope.pl = [
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    },
-    { name: 'HAHA',
-      image: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-    }
-  ];
-
   var getAChat = function(){
-    Chats.getAChat(ComSrvc.usrUid).then(function(chat){
+    Chats.getAChat(ComSrvc.usrUid()).then(function(chat){
       $scope.usrInfo = chat;
     },function(chat){
       console.log(chat);
@@ -203,14 +183,14 @@ var loginPrototype = {
     getAChat();
   });
 
-  Chats.getPokes(ComSrvc.usrUid).then(function(mPokes){
+  Chats.getPokes(ComSrvc.usrUid()).then(function(mPokes){
     $scope.pl = mPokes;
   },function(mPokes){
     NotificationService.set(mPokes, "warning");
   })
 
   $scope.ex = function() {
-    ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid).then(function(msg){
+    ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid()).then(function(msg){
       $state.go('enter');
     },function(msg){
       $state.go('enter');

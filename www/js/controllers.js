@@ -175,11 +175,19 @@ var loginPrototype = {
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+
   Chats.getAChat($stateParams.chatId).then(function(chat){
     $scope.chat = chat;
   },function(chat){
     console.log(chat);
   });
+
+  Chats.getPokes($stateParams.chatId).then(function(mPokes){
+    $scope.pl = mPokes;
+  },function(mPokes){
+    NotificationService.set(mPokes, "warning");
+  });
+
 })
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -201,7 +209,7 @@ var loginPrototype = {
     $scope.pl = mPokes;
   },function(mPokes){
     NotificationService.set(mPokes, "warning");
-  })
+  });
 
   $scope.ex = function() {
     // ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid()).then(function(msg){

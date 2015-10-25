@@ -19,5 +19,14 @@
     <div class="button-panel margin-t-lg">
       <button class="button button-outline button-small button-round button-positive" ng-click="poke(chat.uid)"><i class="icon ion-heart"></i>&nbsp;捅</button>
     </div>
+    <div class="usr-liked-panel clearfix">
+      <h6 class="usr-liked-title">捅他的人</h6>
+      <a class="usr-liked" ng-repeat="usr in pl" nav-transition="none" href="#/tab/chats/{{usr.uid}}">
+        <div class="usr-liked-circle">
+          <img src="{{usr.image}}"/>
+        </div>
+        <div>{{usr.name}}</div>
+      </a>
+    </div>
   </ion-content>
 </ion-view>

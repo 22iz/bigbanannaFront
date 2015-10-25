@@ -204,12 +204,13 @@ var loginPrototype = {
   })
 
   $scope.ex = function() {
-    ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid()).then(function(msg){
-      localStorageService.clearAll();
-      $state.go('enter');
-    },function(msg){
-      $state.go('enter');
-      NotificationService.set(msg, "warning");
-    });
+    // ComSrvc.usrExRoom('sf-2015', ComSrvc.usrUid()).then(function(msg){
+    //   localStorageService.clearAll();
+    //   $state.go('enter');
+    // },function(msg){
+    //   $state.go('enter');
+    //   NotificationService.set(msg, "warning");
+    // });
+    $state.go('enter');
   };
 });
